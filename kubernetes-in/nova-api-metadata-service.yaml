@@ -1,0 +1,8 @@
+apiversion: v1beta1
+kind: Service
+id: &name nova-api-metadata
+port: 8775
+selector:
+  name: *name
+labels:
+  name: *name

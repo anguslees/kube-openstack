@@ -1,0 +1,38 @@
+kind: ReplicationController
+apiVersion: v1beta1
+id: &name docker-registry
+labels:
+  name: *name
+desiredState:
+  replicas: 1
+  replicaSelector:
+    name: *name
+  podTemplate:
+    labels:
+      name: *name
+    desiredState:
+      manifest:
+        version: v1beta1
+        containers:
+          - name: registry
+            image: pallet/registry-swift
+            ports:
+              - name: registry
+                containerPort: 5000
+            env:
+              - key: STANDALONE
+                value: "true"
+              - key: SETTINGS_FLAVOR
+                value: swift
+              - key: OS_AUTH_URL
+                value: %swift_auth_url%
+              - key: OS_CONTAINER
+                value: %swift_container%
+              - key: OS_USERNAME
+                value: %swift_user%
+              - key: OS_PASSWORD
+                value: %swift_password%
+              - key: OS_TENANT_NAME
+                value: %swift_tenant_name%
+              - key: OS_REGION_NAME
+                value: %swift_region_name%

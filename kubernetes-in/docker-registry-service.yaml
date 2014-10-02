@@ -1,0 +1,10 @@
+apiversion: v1beta1
+kind: Service
+id: &name docker-registry
+port: 4999
+protocol: TCP
+selector:
+  name: *name
+containerPort: registry
+labels:
+  name: *name

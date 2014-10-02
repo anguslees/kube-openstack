@@ -1,0 +1,19 @@
+kind: Pod
+apiVersion: v1beta1
+id: &name glance-db-sync
+labels:
+  name: *name
+desiredState:
+  manifest:
+    version: v1beta1
+    containers:
+      - name: *name
+        image: localhost:4999/glance
+        env:
+          - key: DB_URI
+            value: %glance_db_uri%
+          - key: RABBITMQ_PASSWORD
+            value: %rabbitmq_password%
+        command: ["/usr/local/bin/glance-manage.sh", "db_sync"]
+    restartPolicy:
+      onFailure: {}

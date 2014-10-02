@@ -1,0 +1,225 @@
+heat_template_version: 2013-05-23
+
+description: >-
+  Configure the dependencies for an OpenStack instance.
+
+parameters:
+
+  swift_auth_url:
+    description: Keystone URL used when authenticating to object store
+    type: string
+
+  swift_region_name:
+    description: Keystone region used when finding swift endpoint
+    type: string
+    default:
+
+  swift_user:
+    description: User account used to access object store
+    type: string
+
+  swift_password:
+    description: Password used to access object store
+    type: string
+
+resources:
+
+  keystone_admin_password:
+    type: OS::Heat::RandomString
+    properties:
+      length: 32
+      sequence: lettersdigits
+
+  keystone_admin_token:
+    type: OS::Heat::RandomString
+    properties:
+      length: 32
+      sequence: lettersdigits
+
+  keystone_db_admin_password:
+    type: OS::Heat::RandomString
+    properties:
+      length: 32
+      sequence: lettersdigits
+
+  nova_admin_password:
+    type: OS::Heat::RandomString
+    properties:
+      length: 32
+      sequence: lettersdigits
+
+  nova_db_admin_password:
+    type: OS::Heat::RandomString
+    properties:
+      length: 32
+      sequence: lettersdigits
+
+  neutron_admin_password:
+    type: OS::Heat::RandomString
+    properties:
+      length: 32
+      sequence: lettersdigits
+
+  neutron_db_admin_password:
+    type: OS::Heat::RandomString
+    properties:
+      length: 32
+      sequence: lettersdigits
+
+  neutron_metadata_secret:
+    type: OS::Heat::RandomString
+    properties:
+      length: 32
+      sequence: lettersdigits
+
+  glance_admin_password:
+    type: OS::Heat::RandomString
+    properties:
+      length: 32
+      sequence: lettersdigits
+
+  glance_metadata_encryption_key:
+    type: OS::Heat::RandomString
+    properties:
+      # Must be 16, 24 or 32
+      length: 32
+      sequence: lettersdigits
+
+  glance_db_admin_password:
+    type: OS::Heat::RandomString
+    properties:
+      length: 32
+      sequence: lettersdigits
+
+  # used for docker registry, glance backing store, etc
+  store:
+    type: OS::Swift::Container
+    properties:
+      X-Container-Read: {get_param: swift_user}
+      X-Container-Write: {get_param: swift_user}
+
+  database:
+    type: OS::Trove::Instance
+    properties:
+      flavor: 1GB Instance
+      size: 5
+      databases:
+        - name: &keystone_db_name keystone
+        - name: &nova_db_name nova
+        - name: &neutron_db_name neutron
+        - name: &glance_db_name glance
+      users:
+        - name: &keystone_db_user keystone_admin
+          databases: [*keystone_db_name]
+          password: {get_resource: keystone_db_admin_password}
+        - name: &nova_db_user nova_admin
+          databases: [*nova_db_name]
+          password: {get_resource: nova_db_admin_password}
+        - name: &neutron_db_user neutron_admin
+          databases: [*neutron_db_name]
+          password: {get_resource: neutron_db_admin_password}
+        - name: &glance_db_user glance_admin
+          databases: [*glance_db_name]
+          password: {get_resource: glance_db_admin_password}
+
+outputs:
+  keystone_admin_password:
+    description: Keystone admin password
+    value: {get_resource: keystone_admin_password}
+
+  keystone_admin_token:
+    description: Keystone admin token
+    value: {get_resource: keystone_admin_token}
+
+  keystone_db_uri:
+    description: Database connection URI for keystone
+    value:
+      str_replace:
+        template: mysql+mysqlconnector://$user:$pass@$host/$dbname?charset=utf8
+        params:
+          $user: *keystone_db_user
+          $pass: {get_resource: keystone_db_admin_password}
+          $host: {get_attr: [database, hostname]}
+          $dbname: *keystone_db_name
+
+  nova_db_uri:
+    description: Database connection URI for nova
+    value:
+      str_replace:
+        template: mysql+mysqlconnector://$user:$pass@$host/$dbname?charset=utf8
+        params:
+          $user: *nova_db_user
+          $pass: {get_resource: nova_db_admin_password}
+          $host: {get_attr: [database, hostname]}
+          $dbname: *nova_db_name
+
+  nova_admin_password:
+    description: Nova admin password
+    value: {get_resource: nova_admin_password}
+
+  neutron_db_uri:
+    description: Database connection URI for neutron
+    value:
+      str_replace:
+        template: mysql+mysqlconnector://$user:$pass@$host/$dbname?charset=utf8
+        params:
+          $user: *neutron_db_user
+          $pass: {get_resource: neutron_db_admin_password}
+          $host: {get_attr: [database, hostname]}
+          $dbname: *neutron_db_name
+
+  neutron_admin_password:
+    description: Neutron admin password
+    value: {get_resource: neutron_admin_password}
+
+  neutron_metadata_secret:
+    description: Neutron metadata secret
+    value: {get_resource: neutron_metadata_secret}
+
+  glance_db_uri:
+    description: Database connection URI for glance
+    value:
+      str_replace:
+        template: mysql+mysqlconnector://$user:$pass@$host/$dbname?charset=utf8
+        params:
+          $user: *glance_db_user
+          $pass: {get_resource: glance_db_admin_password}
+          $host: {get_attr: [database, hostname]}
+          $dbname: *glance_db_name
+
+  glance_admin_password:
+    description: Glance admin password
+    value: {get_resource: glance_admin_password}
+
+  glance_metadata_encryption_key:
+    description: Glance metadata encryption key
+    value: {get_resource: glance_metadata_encryption_key}
+
+  swift_auth_url:
+    description: Keystone URL
+    value: {get_param: swift_auth_url}
+
+  swift_siteurl:
+    description: Swift URL
+    value: {get_attr: [store, WebsiteURL]}
+
+  swift_region_name:
+    description: Swift Region
+    value: {get_param: swift_region_name}
+
+  swift_user:
+    description: Swift read-write user
+    value: {get_param: swift_user}
+
+  swift_password:
+    description: Swift read-write user
+    value: {get_param: swift_password}
+
+  database_host:
+    description: Database hostname
+    value: {get_attr: [database, hostname]}
+
+  rabbitmq_password:
+    description: Rabbitmq password
+    # fixme!!
+    value: guest

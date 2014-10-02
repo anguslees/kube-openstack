@@ -1,0 +1,19 @@
+kind: Pod
+apiVersion: v1beta1
+id: &name nova-db-sync
+labels:
+  name: *name
+desiredState:
+  manifest:
+    version: v1beta1
+    containers:
+      - name: *name
+        image: localhost:4999/nova
+        env:
+          - key: DB_URI
+            value: %nova_db_uri%
+          - key: ADMIN_PASSWORD
+            value: %nova_admin_password%
+        command: ["/usr/local/bin/nova-manage.sh", "db", "sync"]
+    restartPolicy:
+      onFailure: {}

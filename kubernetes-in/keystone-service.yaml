@@ -1,0 +1,8 @@
+apiversion: v1beta1
+kind: Service
+id: &name keystone
+port: 5000
+selector:
+  name: *name
+labels:
+  name: *name

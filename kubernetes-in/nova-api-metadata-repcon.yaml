@@ -1,0 +1,39 @@
+kind: ReplicationController
+apiVersion: v1beta1
+id: &name nova-api-metadata
+labels:
+  name: *name
+desiredState:
+  replicas: 1
+  replicaSelector:
+    name: *name
+  podTemplate:
+    labels:
+      name: *name
+    desiredState:
+      manifest:
+        version: v1beta1
+        containers:
+          - name: *name
+            image: localhost:4999/nova
+            ports:
+              - name: public
+                containerPort: 8775
+            env:
+              - key: DB_URI
+                value: %nova_db_uri%
+              - key: RABBITMQ_PASSWORD
+                value: %rabbitmq_password%
+              - key: ADMIN_PASSWORD
+                value: %nova_admin_password%
+              - key: NEUTRON_METADATA_SECRET
+                value: %neutron_metadata_secret%
+              - key: NEUTRON_ADMIN_PASSWORD
+                value: %neutron_admin_password%
+            command: ["/usr/local/bin/nova-api-metadata.sh"]
+            livenessProbe:
+              type: http
+              httpGet:
+                path: /
+                port: public
+              initialDelaySeconds: 30

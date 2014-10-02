@@ -1,0 +1,39 @@
+kind: ReplicationController
+apiVersion: v1beta1
+id: &name keystone
+labels:
+  name: *name
+desiredState:
+  replicas: 1
+  replicaSelector:
+    name: *name
+  podTemplate:
+    labels:
+      name: *name
+    desiredState:
+      manifest:
+        version: v1beta1
+        containers:
+          - name: *name
+            image: localhost:4999/keystone
+            ports:
+              - name: public
+                containerPort: 5000
+              - name: admin
+                containerPort: 35357
+            env:
+              - key: DB_URI
+                value: %keystone_db_uri%
+              - key: RABBITMQ_PASSWORD
+                value: %rabbitmq_password%
+              - key: ADMIN_PASSWORD
+                value: %keystone_admin_password%
+              - key: ADMIN_TOKEN
+                value: %keystone_admin_token%
+            command: ["/usr/local/bin/keystone-all.sh"]
+            livenessProbe:
+              type: http
+              httpGet:
+                path: /
+                port: public
+              initialDelaySeconds: 30

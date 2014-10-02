@@ -1,0 +1,8 @@
+apiversion: v1beta1
+kind: Service
+id: &name nova-api
+port: 8774
+selector:
+  name: *name
+labels:
+  name: *name

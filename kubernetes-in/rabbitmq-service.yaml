@@ -1,0 +1,8 @@
+apiversion: v1beta1
+kind: Service
+id: &name rabbitmq
+port: 5672
+selector:
+  name: *name
+labels:
+  name: *name

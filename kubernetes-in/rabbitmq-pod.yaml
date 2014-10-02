@@ -1,0 +1,21 @@
+kind: Pod
+apiVersion: v1beta1
+id: &name rabbitmq
+labels:
+  name: *name
+desiredState:
+  manifest:
+    version: v1beta1
+    containers:
+      - name: *name
+        image: dockerfile/rabbitmq
+        ports:
+          - name: amqp
+            containerPort: 5672
+          - name: admin
+            containerPort: 15672
+        livenessProbe:
+          type: tcp
+          tcpSocket:
+            port: 5672
+          initialDelaySeconds: 30

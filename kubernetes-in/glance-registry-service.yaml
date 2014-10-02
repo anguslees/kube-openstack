@@ -1,0 +1,8 @@
+apiversion: v1beta1
+kind: Service
+id: &name glance-registry
+port: 9191
+selector:
+  name: *name
+labels:
+  name: *name

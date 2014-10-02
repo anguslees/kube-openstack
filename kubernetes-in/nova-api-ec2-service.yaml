@@ -1,0 +1,8 @@
+apiversion: v1beta1
+kind: Service
+id: &name nova-api-ec2
+port: 8773
+selector:
+  name: *name
+labels:
+  name: *name

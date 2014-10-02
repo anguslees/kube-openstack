@@ -1,0 +1,8 @@
+apiversion: v1beta1
+kind: Service
+id: &name neutron
+port: 9696
+selector:
+  name: *name
+labels:
+  name: *name
