@@ -60,8 +60,8 @@ def main(stack_name, in_dir, out_dir):
             'swift_tenant_name': pieces[-2],
         })
 
-    import pprint
-    pprint.pprint(outputs)
+    #import pprint
+    #pprint.pprint(outputs)
 
     in_to_out = os.path.relpath(out_dir, start=in_dir)
 
