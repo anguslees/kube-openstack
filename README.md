@@ -116,4 +116,11 @@ Howto
 
    # Adjust the number of nova-api servers
    kubecfg resize nova-api 3
+
+   # Increase the number of hosts running openstack services (default is 3)
+   # (For users of heat-kube-coreos-rax.yaml)
+   # Kubernetes will assign jobs randomly amongst available hosts
+   # whenever a pod needs to be (re)started.
+   heat stack-update -f heat-kube-coreos-rax.yaml \
+     -P key-name=mykey -P kubernetes-minion-count=4 corekube
    ```
