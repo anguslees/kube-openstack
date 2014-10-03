@@ -323,7 +323,7 @@ resources:
                         Requires=etcd.service
                         After=minion-kubelet.service
                         [Service]
-                        ExecStart=/bin/sh -c 'eth2_ip=$$(ip -o -f inet a show dev eth2 | sed "s/.* inet \([0-9.]\+\).*/\1/"); while :; do etcdctl set /corekube/net/$$eth2_ip 10.245.%index%.0/24 --ttl 300; sleep 120; done'
+                        ExecStart=/opt/bin/kube-net-advertise.sh
                         Restart=always
                         RestartSec=120
                     - name: net-router.service
@@ -413,6 +413,16 @@ resources:
                       set) ip route replace $net via $nh dev eth2 metric 900 ;;
                       expire) ip route del $net via $nh metric 900 ;;
                       esac
+                  - path: /opt/bin/kube-net-advertise.sh
+                    permissions: 0755
+                    content: |
+                      #!/bin/sh
+                      set -x -e
+                      while :; do
+                        eth2_ip=$(ip -o -f inet addr show dev eth2 | sed 's/.* inet \([0-9.]\+\).*/\1/')
+                        etcdctl set /corekube/net/$eth2_ip %pod_subnet% --ttl 300
+                        sleep 120
+                      done
               params:
                 "%discovery%": { get_attr: [discovery, networks, private, 0] }
                 "%uuid%": { get_attr: [coreos-cluster-uuid, value] }
