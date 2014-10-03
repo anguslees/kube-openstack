@@ -129,8 +129,6 @@ resources:
                     reboot-strategy: etcd-lock
 
                   units:
-                    #- name: nova-agent-watcher.service
-                    #  command: try-restart
                     - name: etcd.service
                       command: start
                     - name: master-apiserver.service
