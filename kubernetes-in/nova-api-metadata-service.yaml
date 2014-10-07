@@ -3,6 +3,6 @@ kind: Service
 id: &name nova-api-metadata
 port: 8775
 selector:
-  name: *name
+  name: nova-api
 labels:
   name: *name

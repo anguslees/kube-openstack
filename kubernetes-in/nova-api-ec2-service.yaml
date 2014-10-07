@@ -3,6 +3,6 @@ kind: Service
 id: &name nova-api-ec2
 port: 8773
 selector:
-  name: *name
+  name: nova-api
 labels:
   name: *name
