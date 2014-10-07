@@ -204,18 +204,20 @@ resources:
                         RemainAfterExit=yes
                         ExecStart=/usr/sbin/wipefs -f %data_dev%
                         ExecStart=/usr/sbin/mkfs.btrfs -f %data_dev%
-                    - name: var-lib-docker-volumes.mount
+                    - name: var-lib-docker-btrfs.mount
                       command: start
                       content: |
                         [Unit]
-                        Description=Mount data drive to /var/lib/docker/volumes
+                        Description=Mount data drive to /var/lib/docker/btrfs
                         Requires=format-data.service
                         After=format-data.service
                         Before=docker.service
                         [Mount]
                         What=%data_dev%
-                        Where=/var/lib/docker/volumes
+                        Where=/var/lib/docker/btrfs
                         Type=btrfs
+                        [Install]
+                        Wanted-By=docker.service
                 write_files:
                   - path: /opt/bin/regen-minion-list.sh
                     permissions: 0755
@@ -367,13 +369,17 @@ resources:
                       command: start
                       content: |
                         [Unit]
-                        After=network.target
                         Description=Docker Application Container Engine
                         Documentation=http://docs.docker.io
+                        Requires=docker.socket
+                        After=network.target
 
                         [Service]
+                        Environment="TMPDIR=/var/tmp"
                         ExecStartPre=/bin/mount --make-rprivate /
-                        ExecStart=/usr/bin/docker -d -s=btrfs -H fd:// -b cbr0 --iptables=false
+                        LimitNOFILE=1048576
+                        LimitNPROC=1048576
+                        ExecStart=/usr/bin/docker --daemon --storage-driver=btrfs --host=fd:// --bridge=cbr0 --iptables=false
                         Restart=always
                         RestartSec=30
 
@@ -389,18 +395,20 @@ resources:
                         RemainAfterExit=yes
                         ExecStart=/usr/sbin/wipefs -f %data_dev%
                         ExecStart=/usr/sbin/mkfs.btrfs -f %data_dev%
-                    - name: var-lib-docker-volumes.mount
+                    - name: var-lib-docker-btrfs.mount
                       command: start
                       content: |
                         [Unit]
-                        Description=Mount data drive to /var/lib/docker/volumes
+                        Description=Mount data drive to /var/lib/docker/btrfs
                         Requires=format-data.service
                         After=format-data.service
                         Before=docker.service
                         [Mount]
                         What=%data_dev%
-                        Where=/var/lib/docker/volumes
+                        Where=/var/lib/docker/btrfs
                         Type=btrfs
+                        [Install]
+                        Wanted-By=docker.service
                 write_files:
                   - path: /opt/bin/kube-net-update.sh
                     permissions: 0755
