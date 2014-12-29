@@ -1,0 +1,21 @@
+kind: Pod
+apiVersion: v1beta1
+id: &name client
+labels:
+  name: *name
+desiredState:
+  manifest:
+    version: v1beta1
+    containers:
+      - name: *name
+        registry: %docker_registry%
+        image: %docker_image_prefix%/openstack-client
+        env:
+          - key: OS_USERNAME
+            value: demo
+          - key: OS_TENANT_NAME
+            value: demo
+          - key: OS_PASSWORD
+            value: %demo_user_password%
+      restartPolicy:
+        never: {}

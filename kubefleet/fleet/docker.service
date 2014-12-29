@@ -1,0 +1,25 @@
+[Unit]
+Description=Docker Application Container Engine
+Documentation=http://docs.docker.io
+After=docker.socket early-docker.target
+Requires=docker.socket early-docker.target
+After=flannel.service
+Requires=flannel.service
+
+[Service]
+Environment="TMPDIR=/var/tmp/"
+EnvironmentFile=%t/flannel/subnet.env
+EnvironmentFile=-/run/docker_opts.env
+LimitNOFILE=1048576
+LimitNPROC=1048576
+ExecStartPre=/bin/mount --make-rprivate /
+ExecStart=/usr/bin/docker -d -s=btrfs -H fd:// --bip=${FLANNEL_SUBNET} --mtu=${FLANNEL_MTU} --ip-masq=false ${DOCKER_OPTS}
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target
+
+[X-Fleet]
+Global=true
+MachineMetadata=role=kubernetes

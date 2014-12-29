@@ -8,7 +8,8 @@ desiredState:
     version: v1beta1
     containers:
       - name: *name
-        image: localhost:4999/nova
+        registry: %docker_registry%
+        image: %docker_image_prefix%/nova
         env:
           - key: DB_URI
             value: %nova_db_uri%

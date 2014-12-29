@@ -22,7 +22,31 @@ parameters:
     description: Password used to access object store
     type: string
 
+  docker_registry:
+    description: >-
+      Registry for OpenStack docker images.  Default (empty
+      string) uses official registry.hub.docker.com
+    type: string
+    default: ""
+
+  docker_image_prefix:
+    description: Prefix/user for docker images
+    type: string
+    default: anguslees
+
 resources:
+
+  admin_user_password:
+    type: OS::Heat::RandomString
+    properties:
+      length: 32
+      sequence: lettersdigits
+
+  demo_user_password:
+    type: OS::Heat::RandomString
+    properties:
+      length: 32
+      sequence: lettersdigits
 
   keystone_admin_password:
     type: OS::Heat::RandomString
@@ -91,6 +115,18 @@ resources:
       length: 32
       sequence: lettersdigits
 
+  cinder_admin_password:
+    type: OS::Heat::RandomString
+    properties:
+      length: 32
+      sequence: lettersdigits
+
+  cinder_db_admin_password:
+    type: OS::Heat::RandomString
+    properties:
+      length: 32
+      sequence: lettersdigits
+
   # used for docker registry, glance backing store, etc
   store:
     type: OS::Swift::Container
@@ -108,6 +144,7 @@ resources:
         - name: &nova_db_name nova
         - name: &neutron_db_name neutron
         - name: &glance_db_name glance
+        - name: &cinder_db_name cinder
       users:
         - name: &keystone_db_user keystone_admin
           databases: [*keystone_db_name]
@@ -121,8 +158,20 @@ resources:
         - name: &glance_db_user glance_admin
           databases: [*glance_db_name]
           password: {get_resource: glance_db_admin_password}
+        - name: &cinder_db_user cinder_admin
+          databases: [*cinder_db_name]
+          password: {get_resource: cinder_db_admin_password}
 
 outputs:
+
+  admin_user_password:
+    description: Admin user password
+    value: {get_resource: admin_user_password}
+
+  demo_user_password:
+    description: Demo user password
+    value: {get_resource: demo_user_password}
+
   keystone_admin_password:
     description: Keystone admin password
     value: {get_resource: keystone_admin_password}
@@ -195,6 +244,21 @@ outputs:
     description: Glance metadata encryption key
     value: {get_resource: glance_metadata_encryption_key}
 
+  cinder_db_uri:
+    description: Database connection URI for cinder
+    value:
+      str_replace:
+        template: mysql+mysqlconnector://$user:$pass@$host/$dbname?charset=utf8
+        params:
+          $user: *cinder_db_user
+          $pass: {get_resource: cinder_db_admin_password}
+          $host: {get_attr: [database, hostname]}
+          $dbname: *cinder_db_name
+
+  cinder_admin_password:
+    description: Cinder admin password
+    value: {get_resource: cinder_admin_password}
+
   swift_auth_url:
     description: Keystone URL
     value: {get_param: swift_auth_url}
@@ -223,3 +287,11 @@ outputs:
     description: Rabbitmq password
     # fixme!!
     value: guest
+
+  docker_registry:
+    description: Docker registry
+    value: {get_param: docker_registry}
+
+  docker_image_prefix:
+    description: Prefix/user for docker images
+    value: {get_param: docker_image_prefix}

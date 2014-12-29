@@ -1,8 +1,8 @@
 apiversion: v1beta1
 kind: Service
-id: &name neutron
-port: 9696
+id: &name cinder-api
+port: 8776
 selector:
-  name: neutron-server
+  name: *name
 labels:
   name: *name

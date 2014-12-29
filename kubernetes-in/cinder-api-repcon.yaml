@@ -1,0 +1,41 @@
+kind: ReplicationController
+apiVersion: v1beta1
+id: &name cinder-api
+labels:
+  name: *name
+desiredState:
+  replicas: 3
+  replicaSelector:
+    name: *name
+  podTemplate:
+    labels:
+      name: *name
+    desiredState:
+      manifest:
+        version: v1beta1
+        containers:
+          - name: *name
+            registry: %docker_registry%
+            image: %docker_image_prefix%/cinder
+            ports:
+              - name: osapi
+                containerPort: 8776
+            env:
+              - key: DB_URI
+                value: %cinder_db_uri%
+              - key: RABBITMQ_PASSWORD
+                value: %rabbitmq_password%
+              - key: ADMIN_PASSWORD
+                value: %cinder_admin_password%
+              - key: SWIFT_STORE_AUTH_ADDRESS
+                value: %swift_auth_url%
+              - key: SWIFT_STORE_CONTAINER
+                value: %swift_container%
+              - key: SWIFT_STORE_USERNAME
+                value: %swift_user%
+              - key: SWIFT_STORE_PASSWORD
+                value: %swift_password%
+              - key: SWIFT_STORE_TENANT
+                value: %swift_tenant_name%
+            command: ["/usr/local/bin/cinder-api.sh"]
+            # livenessProbe?

@@ -9,9 +9,7 @@ PATH=$PATH:/usr/local/bin
 : ${HOSTNAME:=$(hostname)}
 export MY_IP HOSTNAME
 
-for f in /etc/glance/*.conf.in; do
-    perl -ple 's/\$ENV\[(\w+)\]/$ENV{$1}/eg' <$f >${f%.in}
-done
+perl -ple 's/\$ENV\[(\w+)\]/$ENV{$1}/eg' </etc/cinder/cinder.conf.in >/etc/cinder/cinder.conf
 
 #exec su --preserve-environment -s $realbin user -- "$@"
 exec $realbin "$@"

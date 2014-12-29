@@ -1,0 +1,14 @@
+[Unit]
+Description=Kubernetes Release Download
+Documentation=https://github.com/GoogleCloudPlatform/kubernetes
+Requires=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/bin/sh -c 'cd /opt && wget --backups=2 --tries=3 https://github.com/anguslees/kubernetes/releases/download/v0.7.0/kubernetes-server-linux-amd64.tar.gz && tar -zxv -f kubernetes-server-linux-amd64.tar.gz'
+
+[X-Fleet]
+Global=true
+MachineMetadata=role=kubernetes

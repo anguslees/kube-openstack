@@ -4,7 +4,7 @@ id: &name keystone
 labels:
   name: *name
 desiredState:
-  replicas: 1
+  replicas: 3
   replicaSelector:
     name: *name
   podTemplate:
@@ -15,7 +15,8 @@ desiredState:
         version: v1beta1
         containers:
           - name: *name
-            image: localhost:4999/keystone
+            registry: %docker_registry%
+            image: %docker_image_prefix%/keystone
             ports:
               - name: public
                 containerPort: 5000
@@ -31,9 +32,4 @@ desiredState:
               - key: ADMIN_TOKEN
                 value: %keystone_admin_token%
             command: ["/usr/local/bin/keystone-all.sh"]
-            livenessProbe:
-              type: http
-              httpGet:
-                path: /
-                port: public
-              initialDelaySeconds: 30
+            # livenessProbe?

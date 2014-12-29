@@ -1,0 +1,19 @@
+kind: Pod
+apiVersion: v1beta1
+id: &name neutron-db-sync
+labels:
+  name: *name
+desiredState:
+  manifest:
+    version: v1beta1
+    containers:
+      - name: *name
+        image: localhost:4999/neutron
+        env:
+          - key: DB_URI
+            value: %neutron_db_uri%
+          - key: ADMIN_PASSWORD
+            value: %neutron_admin_password%
+        command: ["/usr/local/bin/neutron-db-manage.sh", "--config-file=/etc/neutron/neutron.conf", "upgrade", "head"]
+    restartPolicy:
+      onFailure: {}

@@ -1,0 +1,21 @@
+[Unit]
+Description=Container monitor
+Requires=docker.service
+After=docker.service
+
+[Service]
+TimeoutStartSec=300
+EnvironmentFile=-/etc/environment
+ExecStartPre=-/usr/bin/docker rm -f cadvisor-agent
+ExecStartPre=/usr/bin/docker pull google/cadvisor:latest
+ExecStart=/usr/bin/docker run \
+ --name cadvisor-agent \
+ -p ${COREOS_PRIVATE_IPV4}:4194:8080 \
+ -v /var/run:/var/run \
+ -v /var/lib/docker:/var/lib/docker:ro \
+ -v /sys/fs/cgroup:/sys/fs/cgroup:ro \
+ google/cadvisor:latest
+ExecStop=/usr/bin/docker stop cadvisor-agent
+
+[X-Fleet]
+Global=true

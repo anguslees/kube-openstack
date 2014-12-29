@@ -4,7 +4,7 @@ id: &name docker-registry
 labels:
   name: *name
 desiredState:
-  replicas: 1
+  replicas: 3
   replicaSelector:
     name: *name
   podTemplate:
@@ -15,7 +15,7 @@ desiredState:
         version: v1beta1
         containers:
           - name: registry
-            image: pallet/registry-swift
+            image: bacongobbler/registry-swift
             ports:
               - name: registry
                 containerPort: 5000

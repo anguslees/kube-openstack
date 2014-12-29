@@ -15,7 +15,7 @@ parameters:
   kubernetes-minion-count:
     description: Number of CoreOS machines to deploy as Kubernetes Minion
     type: number
-    default: 3
+    default: 5
     constraints:
     - range:
         min: 2
@@ -204,17 +204,17 @@ resources:
                         RemainAfterExit=yes
                         ExecStart=/usr/sbin/wipefs -f %data_dev%
                         ExecStart=/usr/sbin/mkfs.btrfs -f %data_dev%
-                    - name: var-lib-docker-btrfs.mount
+                    - name: media-data.mount
                       command: start
                       content: |
                         [Unit]
-                        Description=Mount data drive to /var/lib/docker/btrfs
+                        Description=Mount data drive to /media/data
                         Requires=format-data.service
                         After=format-data.service
                         Before=docker.service
                         [Mount]
                         What=%data_dev%
-                        Where=/var/lib/docker/btrfs
+                        Where=/media/data
                         Type=btrfs
                         [Install]
                         Wanted-By=docker.service
@@ -297,7 +297,6 @@ resources:
                         After=network-online.target
                         Requires=network-online.target
                         After=docker.service
-                        Requires=docker.service
                         [Service]
                         ExecStartPre=/usr/bin/wget -N -P /opt/bin http://storage.googleapis.com/kubernetes/proxy
                         ExecStartPre=/usr/bin/chmod +x /opt/bin/proxy
@@ -395,17 +394,17 @@ resources:
                         RemainAfterExit=yes
                         ExecStart=/usr/sbin/wipefs -f %data_dev%
                         ExecStart=/usr/sbin/mkfs.btrfs -f %data_dev%
-                    - name: var-lib-docker-btrfs.mount
+                    - name: media-data.mount
                       command: start
                       content: |
                         [Unit]
-                        Description=Mount data drive to /var/lib/docker/btrfs
+                        Description=Mount data drive to /media/data
                         Requires=format-data.service
                         After=format-data.service
                         Before=docker.service
                         [Mount]
                         What=%data_dev%
-                        Where=/var/lib/docker/btrfs
+                        Where=/media/data
                         Type=btrfs
                         [Install]
                         Wanted-By=docker.service

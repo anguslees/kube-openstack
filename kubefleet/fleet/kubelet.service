@@ -1,0 +1,24 @@
+[Unit]
+Description=Kubernetes Kubelet Service
+Documentation=https://github.com/GoogleCloudPlatform/kubernetes
+Requires=network-online.target
+After=docker.service
+Requires=docker.service
+After=kube-download.service
+Requires=kube-download.service
+
+[Service]
+EnvironmentFile=-/etc/environment
+ExecStart=/opt/kubernetes/server/bin/kubelet \
+ --address=${COREOS_PRIVATE_IPV4} \
+ --port=10250 \
+ --hostname_override=%H \
+ --etcd_servers=http://127.0.0.1:4001 \
+ --logtostderr=true
+Restart=always
+RestartSec=10
+
+[X-Fleet]
+Global=true
+MachineMetadata=role=kubernetes
+MachineMetadata=kubernetes_role=minion

@@ -14,8 +14,4 @@ desiredState:
             containerPort: 5672
           - name: admin
             containerPort: 15672
-        livenessProbe:
-          type: tcp
-          tcpSocket:
-            port: 5672
-          initialDelaySeconds: 30
+        # livenessProbe?

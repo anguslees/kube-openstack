@@ -8,7 +8,8 @@ desiredState:
     version: v1beta1
     containers:
       - name: *name
-        image: localhost:4999/glance
+        registry: %docker_registry%
+        image: %docker_image_prefix%/glance
         env:
           - key: DB_URI
             value: %glance_db_uri%

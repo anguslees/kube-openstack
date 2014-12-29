@@ -4,7 +4,10 @@ set -e -x
 
 realbin=${0%.sh}
 PATH=$PATH:/usr/local/bin
-test -n "$COREOS_PUBLIC_IPV4" || . /etc/environment
+
+: ${MY_IP:=$(hostname -i)}
+: ${HOSTNAME:=$(hostname)}
+export MY_IP HOSTNAME
 
 perl -ple 's/\$ENV\[(\w+)\]/$ENV{$1}/eg' </etc/nova/nova.conf.in >/etc/nova/nova.conf
 

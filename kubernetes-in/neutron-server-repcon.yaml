@@ -1,6 +1,6 @@
 kind: ReplicationController
 apiVersion: v1beta1
-id: &name nova-api
+id: &name neutron-server
 labels:
   name: *name
 desiredState:
@@ -16,24 +16,20 @@ desiredState:
         containers:
           - name: *name
             registry: %docker_registry%
-            image: %docker_image_prefix%/nova
+            image: %docker_image_prefix%/neutron
             ports:
               - name: osapi
-                containerPort: 8774
-              - name: ec2
-                containerPort: 8773
-              - name: metadata
-                containerPort: 8775
+                containerPort: 9696
             env:
               - key: DB_URI
-                value: %nova_db_uri%
+                value: %neutron_db_uri%
               - key: RABBITMQ_PASSWORD
                 value: %rabbitmq_password%
               - key: ADMIN_PASSWORD
-                value: %nova_admin_password%
+                value: %neutron_admin_password%
               - key: NEUTRON_METADATA_SECRET
                 value: %neutron_metadata_secret%
-              - key: NEUTRON_ADMIN_PASSWORD
-                value: %neutron_admin_password%
-            command: ["/usr/local/bin/nova-api.sh"]
+              - key: NOVA_ADMIN_PASSWORD
+                value: %nova_admin_password%
+            command: ["/usr/local/bin/neutron-server.sh"]
             # livenessProbe?
