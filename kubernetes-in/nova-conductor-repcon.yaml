@@ -16,7 +16,7 @@ desiredState:
         containers:
           - name: *name
             registry: %docker_registry%
-            image: %docker_image_prefix%/nova
+            image: %docker_image_prefix%/nova:latest
             env:
               - key: DB_URI
                 value: %nova_db_uri%

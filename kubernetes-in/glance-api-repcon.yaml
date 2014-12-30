@@ -16,7 +16,7 @@ desiredState:
         containers:
           - name: *name
             registry: %docker_registry%
-            image: %docker_image_prefix%/glance
+            image: %docker_image_prefix%/glance:latest
             env:
               - key: DB_URI
                 value: %glance_db_uri%
@@ -46,7 +46,7 @@ desiredState:
             # fixme: livenessProbe?
           - name: glance-scrubber
             registry: %docker_registry%
-            image: %docker_image_prefix%/glance
+            image: %docker_image_prefix%/glance:latest
             env:
               - key: DB_URI
                 value: %glance_db_uri%

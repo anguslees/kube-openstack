@@ -9,7 +9,7 @@ desiredState:
     containers:
       - name: *name
         registry: %docker_registry%
-        image: %docker_image_prefix%/keystone
+        image: %docker_image_prefix%/keystone:latest
         env:
           - key: ADMIN_TOKEN
             value: %keystone_admin_token%

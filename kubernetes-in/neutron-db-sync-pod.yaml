@@ -8,7 +8,8 @@ desiredState:
     version: v1beta1
     containers:
       - name: *name
-        image: localhost:4999/neutron
+        registry: %docker_registry%
+        image: %docker_image_prefix%/neutron:latest
         env:
           - key: DB_URI
             value: %neutron_db_uri%
