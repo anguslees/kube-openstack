@@ -16,6 +16,7 @@ RUN apt-get -qqy install dnsmasq-utils dnsmasq-base iputils-arping ipset
 USER user
 RUN \
  mkdir -p /tmp/git-fetch && \
+ cd /tmp/git-fetch && \
  git init && \
  git fetch --depth 1 https://github.com/openstack/neutron.git master && \
  git checkout FETCH_HEAD

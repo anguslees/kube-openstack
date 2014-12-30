@@ -14,6 +14,7 @@ RUN apt-get -qqy install python-pbr python-anyjson python-httplib2 python-jsonsc
 USER user
 RUN \
  mkdir -p /tmp/git-fetch && \
+ cd /tmp/git-fetch && \
  git init && \
  git fetch --depth 1 https://github.com/openstack/tempest.git master && \
  git checkout FETCH_HEAD
