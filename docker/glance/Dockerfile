@@ -35,6 +35,7 @@ ADD glance-api.conf /etc/glance/glance-api.conf.in
 ADD glance-registry.conf /etc/glance/glance-registry.conf.in
 ADD glance-scrubber.conf /etc/glance/glance-scrubber.conf.in
 ADD glance-cache.conf /etc/glance/glance-cache.conf.in
+ADD glance-manage.conf /etc/glance/glance-manage.conf.in
 
 ADD _wrap.sh /usr/local/bin/glance-api.sh
 ADD _wrap.sh /usr/local/bin/glance-cache-cleaner.sh
