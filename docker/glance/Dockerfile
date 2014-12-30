@@ -34,11 +34,18 @@ WORKDIR /
 ADD glance-api.conf /etc/glance/glance-api.conf.in
 ADD glance-registry.conf /etc/glance/glance-registry.conf.in
 ADD glance-scrubber.conf /etc/glance/glance-scrubber.conf.in
+ADD glance-cache.conf /etc/glance/glance-cache.conf.in
 
 ADD _wrap.sh /usr/local/bin/glance-api.sh
-ADD _wrap.sh /usr/local/bin/glance-registry.sh
-ADD _wrap.sh /usr/local/bin/glance-scrubber.sh
+ADD _wrap.sh /usr/local/bin/glance-cache-cleaner.sh
+ADD _wrap.sh /usr/local/bin/glance-cache-manage.sh
+ADD _wrap.sh /usr/local/bin/glance-cache-prefetcher.sh
+ADD _wrap.sh /usr/local/bin/glance-cache-pruner.sh
+ADD _wrap.sh /usr/local/bin/glance-control.sh
 ADD _wrap.sh /usr/local/bin/glance-manage.sh
+ADD _wrap.sh /usr/local/bin/glance-registry.sh
+ADD _wrap.sh /usr/local/bin/glance-replicator.sh
+ADD _wrap.sh /usr/local/bin/glance-scrubber.sh
 
 VOLUME ["/store", "/cache", "/lock"]
 EXPOSE 9292 9191
