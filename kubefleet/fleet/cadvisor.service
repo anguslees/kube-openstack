@@ -16,6 +16,8 @@ ExecStart=/usr/bin/docker run \
  -v /sys/fs/cgroup:/sys/fs/cgroup:ro \
  google/cadvisor:latest
 ExecStop=/usr/bin/docker stop cadvisor-agent
+Restart=always
+RestartSec=30
 
 [X-Fleet]
 Global=true
