@@ -1,4 +1,1 @@
 . openrc
-
-alias nova='nova --bypass-url="$NOVA_URL"'
-alias neutron='neutron --os-url="$NEUTRON_URL"'

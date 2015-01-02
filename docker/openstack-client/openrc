@@ -1,17 +1,3 @@
 OS_AUTH_URL=http://$KEYSTONE_PORT_5000_TCP_ADDR:$KEYSTONE_PORT_5000_TCP_PORT/v2.0
 : ${OS_REGION_NAME:=RegionOne}
 export OS_AUTH_URL OS_REGION_NAME
-
-# The following settings bypass keystone catalog lookup and hit the local kubernetes proxy.
-# TODO(gus): Remove these once we have a stable endpoint we can configure in keystone.
-
-# not directly supported - needs to use nova --bypass-url via wrapper
-NOVA_URL=http://$NOVA_PORT_8774_TCP_ADDR:$NOVA_PORT_8774_TCP_PORT/
-export NOVA_URL
-
-OS_IMAGE_URL=http://$GLANCE_PORT_9292_TCP_ADDR:$GLANCE_PORT_9292_TCP_PORT/
-export OS_IMAGE_URL
-
-# not directly supported - needs to use neutron --os-url via wrapper
-NEUTRON_URL=http://$NEUTRON_PORT_9292_TCP_ADDR:$NEUTRON_PORT_9292_TCP_PORT/
-export NEUTRON_URL
