@@ -46,4 +46,4 @@ ADD _wrap.sh /usr/local/bin/nova-xvpnvcproxy.sh
 
 WORKDIR /
 VOLUME ["/instances"]
-EXPOSE 8773 8774 8775
+EXPOSE 8773 8774 8775 6080

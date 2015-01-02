@@ -1,0 +1,8 @@
+apiversion: v1beta1
+kind: Service
+id: &name nova-novncproxy
+port: 6080
+selector:
+  name: *name
+labels:
+  name: *name
