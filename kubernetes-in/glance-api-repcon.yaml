@@ -17,6 +17,9 @@ desiredState:
           - name: *name
             registry: %docker_registry%
             image: %docker_image_prefix%/glance:latest
+            ports:
+              - name: api
+                containerPort: 9292
             env:
               - key: DB_URI
                 value: %glance_db_uri%
