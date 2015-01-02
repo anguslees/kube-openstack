@@ -17,6 +17,6 @@ desiredState:
             value: demo
           - key: OS_PASSWORD
             value: %demo_user_password%
-        command: ["/bin/sh -c 'while :; do sleep 86400; done'"]
+        command: ["sh", "-c",  "while :; do sleep 86400; done"]
     restartPolicy:
       never: {}
