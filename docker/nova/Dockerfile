@@ -45,4 +45,5 @@ ADD _wrap.sh /usr/local/bin/nova-spicehtml5proxy.sh
 ADD _wrap.sh /usr/local/bin/nova-xvpnvcproxy.sh
 
 WORKDIR /
+VOLUME ["/instances"]
 EXPOSE 8773 8774 8775
