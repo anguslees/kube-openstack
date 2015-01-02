@@ -40,7 +40,7 @@ ADD neutron.conf /etc/neutron/neutron.conf.in
 ADD l3_agent_network.ini /etc/neutron/l3_agent_network.ini.in
 ADD l3_agent_compute.ini /etc/neutron/l3_agent_compute.ini.in
 ADD metadata_agent.ini /etc/neutron/metadata_agent.ini.in
-ADD ml2_conf.ini /etc/neutron/plugins/ml2/ml2_conf.ini.in
+ADD ml2_conf.ini /etc/neutron/ml2_conf.ini.in
 
 ADD _wrap.sh /usr/local/bin/neutron-server.sh
 ADD _wrap.sh /usr/local/bin/neutron-dhcp-agent.sh
