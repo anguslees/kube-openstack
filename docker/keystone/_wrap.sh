@@ -9,7 +9,9 @@ PATH=$PATH:/usr/local/bin
 : ${HOSTNAME:=$(hostname)}
 export MY_IP HOSTNAME
 
-perl -ple 's/\$ENV\[(\w+)\]/$ENV{$1}/eg' </etc/keystone/keystone.conf.in >/etc/keystone/keystone.conf
+for f in /etc/keystone/*.in; do
+    perl -ple 's/\$ENV\[(\w+)\]/$ENV{$1}/eg' <$f >${f%.in}
+done
 
 test "$RUN_KEYSTONE_DB_SYNC" = true && keystone-manage db_sync
 

@@ -1,0 +1,39 @@
+catalog.RegionOne.identity.publicURL = http://$ENV[KEYSTONE_PORT_5000_TCP_ADDR]:$ENV[KEYSTONE_PORT_5000_TCP_PORT]/v2.0
+catalog.RegionOne.identity.adminURL = http://$ENV[KEYSTONE_PORT_35357_TCP_ADDR]:$ENV[KEYSTONE_PORT_35357_TCP_PORT]/v2.0
+catalog.RegionOne.identity.internalURL = http://$ENV[KEYSTONE_PORT_5000_TCP_ADDR]:$ENV[KEYSTONE_PORT_5000_TCP_PORT]/v2.0
+catalog.RegionOne.identity.name = Keystone Identity Service
+
+catalog.RegionOne.compute.publicURL = http://$ENV[NOVA_API_PORT_8774_TCP_ADDR]:$ENV[NOVA_API_PORT_8774_TCP_PORT]/v2/$(tenant_id)s
+catalog.RegionOne.compute.adminURL = http://$ENV[NOVA_API_PORT_8774_TCP_ADDR]:$ENV[NOVA_API_PORT_8774_TCP_PORT]/v2/$(tenant_id)s
+catalog.RegionOne.compute.internalURL = http://$ENV[NOVA_API_PORT_8774_TCP_ADDR]:$ENV[NOVA_API_PORT_8774_TCP_PORT]/v2/$(tenant_id)s
+catalog.RegionOne.compute.name = Nova Compute Service
+
+catalog.RegionOne.computev21.publicURL = http://$ENV[NOVA_API_PORT_8774_TCP_ADDR]:$ENV[NOVA_API_PORT_8774_TCP_PORT]/v2.1/$(tenant_id)s
+catalog.RegionOne.computev21.adminURL = http://$ENV[NOVA_API_PORT_8774_TCP_ADDR]:$ENV[NOVA_API_PORT_8774_TCP_PORT]/v2.1/$(tenant_id)s
+catalog.RegionOne.computev21.internalURL = http://$ENV[NOVA_API_PORT_8774_TCP_ADDR]:$ENV[NOVA_API_PORT_8774_TCP_PORT]/v2.1/$(tenant_id)s
+catalog.RegionOne.computev21.name = Nova Compute Service V2.1
+
+catalog.RegionOne.ec2.publicURL = http://$ENV[NOVA_API_PORT_8773_TCP_ADDR]:$ENV[NOVA_API_PORT_8773_TCP_PORT]/services/Cloud
+catalog.RegionOne.ec2.adminURL = http://$ENV[NOVA_API_PORT_8773_TCP_ADDR]:$ENV[NOVA_API_PORT_8773_TCP_PORT]/services/Admin
+catalog.RegionOne.ec2.internalURL = http://$ENV[NOVA_API_PORT_8773_TCP_ADDR]:$ENV[NOVA_API_PORT_8773_TCP_PORT]/services/Cloud
+catalog.RegionOne.ec2.name = EC2 Compatibility Layer
+
+catalog.RegionOne.image.publicURL = http://$ENV[GLANCE_API_PORT_9292_TCP_ADDR]:$ENV[GLANCE_API_PORT_9292_TCP_PORT]/
+catalog.RegionOne.image.adminURL = http://$ENV[GLANCE_API_PORT_9292_TCP_ADDR]:$ENV[GLANCE_API_PORT_9292_TCP_PORT]/
+catalog.RegionOne.image.internalURL = http://$ENV[GLANCE_API_PORT_9292_TCP_ADDR]:$ENV[GLANCE_API_PORT_9292_TCP_PORT]/
+catalog.RegionOne.image.name = Glance Image Service
+
+catalog.RegionOne.volume.publicURL = http://$ENV[CINDER_API_PORT_8776_TCP_ADDR]:$ENV[CINDER_API_PORT_8776_TCP_PORT]/v1/$(tenant_id)s
+catalog.RegionOne.volume.adminURL = http://$ENV[CINDER_API_PORT_8776_TCP_ADDR]:$ENV[CINDER_API_PORT_8776_TCP_PORT]/v1/$(tenant_id)s
+catalog.RegionOne.volume.internalURL = http://$ENV[CINDER_API_PORT_8776_TCP_ADDR]:$ENV[CINDER_API_PORT_8776_TCP_PORT]/v1/$(tenant_id)s
+catalog.RegionOne.volume.name = Cinder Volume Service
+
+catalog.RegionOne.volumev2.publicURL = http://$ENV[CINDER_API_PORT_8776_TCP_ADDR]:$ENV[CINDER_API_PORT_8776_TCP_PORT]/v2/$(tenant_id)s
+catalog.RegionOne.volumev2.adminURL = http://$ENV[CINDER_API_PORT_8776_TCP_ADDR]:$ENV[CINDER_API_PORT_8776_TCP_PORT]/v2/$(tenant_id)s
+catalog.RegionOne.volumev2.internalURL = http://$ENV[CINDER_API_PORT_8776_TCP_ADDR]:$ENV[CINDER_API_PORT_8776_TCP_PORT]/v2/$(tenant_id)s
+catalog.RegionOne.volumev2.name = Cinder Volume Service V2
+
+catalog.RegionOne.network.publicURL = http://$ENV[NEUTRON_PORT_9696_TCP_ADDR]:$ENV[NEUTRON_PORT_9696_TCP_PORT]/
+catalog.RegionOne.network.adminURL = http://$ENV[NEUTRON_PORT_9696_TCP_ADDR]:$ENV[NEUTRON_PORT_9696_TCP_PORT]/
+catalog.RegionOne.network.internalURL = http://$ENV[NEUTRON_PORT_9696_TCP_ADDR]:$ENV[NEUTRON_PORT_9696_TCP_PORT]/
+catalog.RegionOne.network.name = Neutron Service
