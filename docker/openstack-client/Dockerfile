@@ -13,7 +13,4 @@ ADD bashrc /home/user/.bashrc
 
 USER user
 WORKDIR /home/user
-# This forces .bashrc to be read, setting up the environment
-ENTRYPOINT ["/bin/bash", "-c"]
-# This is the "real" command that gets run by default
 CMD ["/bin/bash"]
