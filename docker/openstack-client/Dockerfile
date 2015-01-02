@@ -1,4 +1,4 @@
-FROM ubuntu:utopic
+FROM ubuntu:vivid
 MAINTAINER Angus Lees <gus@inodes.org>
 
 RUN adduser --disabled-login --gecos 'Generic unprivileged user' user
