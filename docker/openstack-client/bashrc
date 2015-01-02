@@ -1,2 +1,2 @@
-. env
+test -r env && . env
 . openrc
