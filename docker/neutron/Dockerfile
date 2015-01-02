@@ -37,7 +37,8 @@ RUN python setup.py install && \
 RUN pip install sqlalchemy-migrate\>=0.9.2
 
 ADD neutron.conf /etc/neutron/neutron.conf.in
-ADD l3_agent.ini /etc/neutron/l3_agent.ini.in
+ADD l3_agent_network.ini /etc/neutron/l3_agent_network.ini.in
+ADD l3_agent_compute.ini /etc/neutron/l3_agent_compute.ini.in
 ADD metadata_agent.ini /etc/neutron/metadata_agent.ini.in
 ADD ml2_conf.ini /etc/neutron/plugins/ml2/ml2_conf.ini.in
 
