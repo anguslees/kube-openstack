@@ -53,4 +53,4 @@ ADD _wrap.sh /usr/local/bin/neutron-metering-agent.sh
 ADD _wrap.sh /usr/local/bin/neutron-db-manage.sh
 
 WORKDIR /
-EXPOSE 9696 9697
+EXPOSE 9696 9697 4789
