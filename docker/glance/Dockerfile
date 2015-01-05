@@ -9,7 +9,7 @@ RUN apt-get -qqy upgrade
 RUN apt-get -qqy --no-install-recommends install python-dev python-pip git python-mysql.connector
 
 # Fetch as much as we can from apt
-RUN apt-get -qqy --no-install-recommends install python-pbr python-webob python-eventlet python-greenlet python-netaddr python-pastedeploy python-paste python-routes python-six python-sqlalchemy python-migrate python-iso8601 python-keystoneclient python-keystonemiddleware python-swiftclient python-cinderclient python-oslo.config python-oslo.messaging python-oslo.db python-oslo.i18n python-oslo.vmware python-oslo.serialization python-oslo.concurrency python-retrying python-jsonschema python-posix-ipc python-suds python-boto python-crypto python-simplegeneric python-wsme python-osprofiler python-ipaddr python-glance-store
+RUN apt-get -qqy --no-install-recommends install python-pbr python-webob python-eventlet python-greenlet python-netaddr python-pastedeploy python-paste python-routes python-six python-sqlalchemy python-migrate python-iso8601 python-openssl python-crypto python-cffi python-keystoneclient python-keystonemiddleware python-swiftclient python-cinderclient python-oslo.config python-oslo.messaging python-oslo.db python-oslo.i18n python-oslo.vmware python-oslo.serialization python-oslo.concurrency python-retrying python-jsonschema python-posix-ipc python-suds python-boto python-crypto python-simplegeneric python-wsme python-osprofiler python-ipaddr python-glance-store
 
 USER user
 RUN \
