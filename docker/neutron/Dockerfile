@@ -11,7 +11,7 @@ RUN apt-get -qqy install python-dev python-pip git python-mysql.connector
 # Fetch as much as we can from apt
 RUN apt-get -qqy install python-pbr python-paste python-pastedeploy python-routes python-anyjson python-argparse python-babel python-eventlet python-greenlet python-httplib2 python-requests python-iso8601 python-jsonrpclib python-jinja2 python-keystonemiddleware python-netaddr python-neutronclient python-sqlalchemy python-webob python-keystoneclient python-alembic python-six python-stevedore python-oslo.config python-oslo.db python-oslo.messaging python-oslo.rootwrap python-oslo.serialization python-novaclient python-oslo.concurrency
 
-RUN apt-get -qqy install dnsmasq-utils dnsmasq-base iputils-arping ipset
+RUN apt-get -qqy install iproute dnsmasq-utils dnsmasq-base iputils-arping ipset
 
 USER user
 RUN \
