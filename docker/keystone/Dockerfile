@@ -6,10 +6,10 @@ RUN adduser --disabled-login --gecos 'Generic unprivileged user' user
 RUN apt-get -qq update
 RUN apt-get -qqy upgrade
 
-RUN apt-get -qqy install python-dev python-pip git python-mysql.connector
+RUN apt-get -qqy --no-install-recommends install python-dev python-pip git python-mysql.connector
 
 # Fetch as much as we can from apt
-RUN apt-get -qqy install python-pbr python-webob python-eventlet python-greenlet python-netaddr python-pastedeploy python-paste python-routes python-six python-sqlalchemy python-migrate python-passlib python-iso8601 python-keystoneclient python-keystonemiddleware python-oslo.config python-oslo.messaging python-oslo.db python-oslo.i18n python-oslo.utils python-oslo.serialization python-oslo.concurrency python-babel python-dogpile.cache python-jsonschema python-pycadf python-posix-ipc python-oauthlib
+RUN apt-get -qqy --no-install-recommends install python-pbr python-webob python-eventlet python-greenlet python-netaddr python-pastedeploy python-paste python-routes python-six python-sqlalchemy python-migrate python-passlib python-iso8601 python-keystoneclient python-keystonemiddleware python-oslo.config python-oslo.messaging python-oslo.db python-oslo.i18n python-oslo.utils python-oslo.serialization python-oslo.concurrency python-babel python-dogpile.cache python-jsonschema python-pycadf python-posix-ipc python-oauthlib
 
 USER user
 RUN \

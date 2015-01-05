@@ -6,10 +6,10 @@ RUN adduser --disabled-login --gecos 'Generic unprivileged user' user
 RUN apt-get -qq update
 RUN apt-get -qqy upgrade
 
-RUN apt-get -qqy install python-dev python-pip git python-mysql.connector
+RUN apt-get -qqy --no-install-recommends install python-dev python-pip git python-mysql.connector
 
 # Fetch as much as we can from apt
-RUN apt-get -qqy install python-pbr python-anyjson python-httplib2 python-jsonschema python-testtools python-lxml python-boto python-paramiko python-netaddr python-ceilometerclient python-glanceclient python-keystoneclient python-novaclient python-neutronclient python-cinderclient python-heatclient python-ironicclient python-saharaclient python-swiftclient python-testresources python-testrepository python-oslo.config python-six python-iso8601 python-fixtures python-testscenarios
+RUN apt-get -qqy --no-install-recommends install python-pbr python-anyjson python-httplib2 python-jsonschema python-testtools python-lxml python-boto python-paramiko python-netaddr python-ceilometerclient python-glanceclient python-keystoneclient python-novaclient python-neutronclient python-cinderclient python-heatclient python-ironicclient python-saharaclient python-swiftclient python-testresources python-testrepository python-oslo.config python-six python-iso8601 python-fixtures python-testscenarios
 
 USER user
 RUN \

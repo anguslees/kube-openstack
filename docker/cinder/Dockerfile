@@ -6,10 +6,10 @@ RUN adduser --disabled-login --gecos 'Generic unprivileged user' user
 RUN apt-get -qq update
 RUN apt-get -qqy upgrade
 
-RUN apt-get -qqy install python-dev python-pip git python-mysql.connector
+RUN apt-get -qqy --no-install-recommends install python-dev python-pip git python-mysql.connector
 
 # Fetch as much as we can from apt
-RUN apt-get -qqy install python-pbr python-anyjson python-argparse python-babel python-eventlet python-greenlet python-iso8601 python-keystonemiddleware python-kombu python-lxml python-netaddr python-oslo.config python-oslo.db python-oslo.messaging python-oslo.rootwrap python-paramiko python-paste python-pastedeploy python-crypto python-glanceclient python-novaclient python-swiftclient python-requests python-routes python-taskflow python-rtslib-fb python-six python-sqlalchemy python-migrate python-stevedore python-suds python-webob python-wsgiref python-oslo.i18n python-oslo.serialization python-oslo.concurrency python-barbicanclient python-osprofiler python-xattr
+RUN apt-get -qqy --no-install-recommends install python-pbr python-anyjson python-argparse python-babel python-eventlet python-greenlet python-iso8601 python-keystonemiddleware python-kombu python-lxml python-netaddr python-oslo.config python-oslo.db python-oslo.messaging python-oslo.rootwrap python-paramiko python-paste python-pastedeploy python-crypto python-glanceclient python-novaclient python-swiftclient python-requests python-routes python-taskflow python-rtslib-fb python-six python-sqlalchemy python-migrate python-stevedore python-suds python-webob python-wsgiref python-oslo.i18n python-oslo.serialization python-oslo.concurrency python-barbicanclient python-osprofiler python-xattr
 
 USER user
 RUN \
