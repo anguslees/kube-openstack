@@ -9,7 +9,7 @@ RUN apt-get -qqy upgrade
 RUN apt-get -qqy --no-install-recommends install python-dev python-pip git python-mysql.connector
 
 # Fetch as much as we can from apt
-RUN apt-get -qqy --no-install-recommends install python-anyjson python-argparse python-babel python-paramiko python-jinja2 python-netaddr python-suds python-pyasn1 python-iso8601 python-jsonschema python-pycadf python-lxml python-webob python-greenlet python-pastescript python-pastedeploy python-migrate python-eventlet python-sqlalchemy python-boto python-kombu websockify python-oslo.concurrency python-keystonemiddleware python-keystoneclient python-routes python-cinderclient python-neutronclient python-glanceclient python-oslo.concurrency python-oslo.serialization python-oslo.utils python-oslo.db python-oslo.rootwrap python-simplejson
+RUN apt-get -qqy --no-install-recommends install python-anyjson python-argparse python-babel python-paramiko python-jinja2 python-netaddr python-suds python-pyasn1 python-iso8601 python-jsonschema python-pycadf python-lxml python-webob python-greenlet python-pastescript python-pastedeploy python-migrate python-eventlet python-sqlalchemy python-rfc3986 python-boto python-kombu websockify python-oslo.concurrency python-keystonemiddleware python-keystoneclient python-routes python-cinderclient python-neutronclient python-glanceclient python-oslo.concurrency python-oslo.serialization python-oslo.utils python-oslo.db python-oslo.vmware python-oslo.rootwrap python-simplejson
 
 RUN apt-get -qqy --no-install-recommends install iproute2 python-amqplib python-configobj python-iso8601 iptables python-libvirt
 
