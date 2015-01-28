@@ -1,0 +1,34 @@
+kind: ReplicationController
+apiVersion: v1beta1
+id: &name swift-container-server
+labels:
+  name: *name
+desiredState:
+  replicas: 3
+  replicaSelector:
+    name: *name
+  podTemplate:
+    labels:
+      name: *name
+    desiredState:
+      manifest:
+        version: v1beta1
+        containers:
+          - name: *name
+            registry: %docker_registry%
+            image: %docker_image_prefix%/swift:latest
+            ports:
+              - name: container
+                hostPort: 6001
+            env:
+              - key: HASH_PATH_PREFIX
+                value: %swift_hash_path_prefix%
+              - key: HASH_PATH_SUFFIX
+                value: %swift_hash_path_suffix%
+            command: ["/usr/local/bin/swift-container-server.sh", "/etc/swift/container-server.conf"]
+            livenessProbe:
+              initialDelaySeconds: 30
+              type: http
+              httpGet:
+                port: account
+                path: /healthcheck

@@ -1,0 +1,41 @@
+kind: ReplicationController
+apiVersion: v1beta1
+id: &name swift-object-server
+labels:
+  name: *name
+desiredState:
+  replicas: 5
+  replicaSelector:
+    name: *name
+  podTemplate:
+    labels:
+      name: *name
+    desiredState:
+      manifest:
+        version: v1beta1
+        containers:
+          - name: *name
+            registry: %docker_registry%
+            image: %docker_image_prefix%/swift:latest
+            ports:
+              - name: object
+                hostPort: 6000
+            env:
+              - key: HASH_PATH_PREFIX
+                value: %swift_hash_path_prefix%
+              - key: HASH_PATH_SUFFIX
+                value: %swift_hash_path_suffix%
+            volumeMounts:
+              - name: data1
+                mountPath: /srv/node/data1
+            command: ["/usr/local/bin/swift-object-server.sh", "/etc/swift/object-server.conf"]
+            livenessProbe:
+              initialDelaySeconds: 30
+              type: http
+              httpGet:
+                port: proxy
+                path: /healthcheck
+        volumes:
+          - name: data1
+            source:
+              emptyDir: {}

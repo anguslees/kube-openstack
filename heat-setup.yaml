@@ -127,6 +127,24 @@ resources:
       length: 32
       sequence: lettersdigits
 
+  swift_admin_password:
+    type: OS::Heat::RandomString
+    properties:
+      length: 32
+      sequence: lettersdigits
+
+  swift_hash_path_prefix:
+    type: OS::Heat::RandomString
+    properties:
+      length: 16
+      sequence: lettersdigits
+
+  swift_hash_path_suffix:
+    type: OS::Heat::RandomString
+    properties:
+      length: 16
+      sequence: lettersdigits
+
   # used for docker registry, glance backing store, etc
   store:
     type: OS::Swift::Container
@@ -259,8 +277,22 @@ outputs:
     description: Cinder admin password
     value: {get_resource: cinder_admin_password}
 
+  # The following refer to the swift service run in the cluster
+  swift_admin_password:
+    description: Swift admin password
+    value: {get_resource: swift_admin_password}
+
+  swift_hash_path_prefix:
+    description: Swift hash path prefix
+    value: {get_resource: swift_hash_path_prefix}
+
+  swift_hash_path_suffix:
+    description: Swift hash path suffix
+    value: {get_resource: swift_hash_path_suffix}
+
+  # The following refer to the "upstream" swift used by other services like glance
   swift_auth_url:
-    description: Keystone URL
+    description: Keystone URL used for swift
     value: {get_param: swift_auth_url}
 
   swift_siteurl:

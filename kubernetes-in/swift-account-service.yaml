@@ -1,0 +1,8 @@
+apiversion: v1beta1
+kind: Service
+id: &name swift-account
+port: 6002
+selector:
+  name: swift-account-server
+labels:
+  name: *name

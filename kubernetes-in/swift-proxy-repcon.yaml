@@ -1,0 +1,42 @@
+kind: ReplicationController
+apiVersion: v1beta1
+id: &name swift-proxy
+labels:
+  name: *name
+desiredState:
+  replicas: 3
+  replicaSelector:
+    name: *name
+  podTemplate:
+    labels:
+      name: *name
+    desiredState:
+      manifest:
+        version: v1beta1
+        containers:
+          - name: *name
+            registry: %docker_registry%
+            image: %docker_image_prefix%/swift:latest
+            ports:
+              - name: proxy
+                containerPort: 80
+                hostPort: 6004
+            env:
+              - key: ADMIN_PASSWORD
+                value: %swift_admin_password%
+              - key: STORAGE_DOMAIN
+                value: example.com
+              - key: HASH_PATH_PREFIX
+                value: %swift_hash_path_prefix%
+              - key: HASH_PATH_SUFFIX
+                value: %swift_hash_path_suffix%
+            command: ["/usr/local/bin/swift-proxy-server.sh", "/etc/swift/proxy-server.conf"]
+            livenessProbe:
+              initialDelaySeconds: 30
+              type: http
+              httpGet:
+                port: proxy
+                path: /healthcheck
+          - name: memcached
+            registry: %docker_registry%
+            image: memcached

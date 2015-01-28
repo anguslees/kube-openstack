@@ -1,0 +1,8 @@
+apiversion: v1beta1
+kind: Service
+id: &name swift-proxy
+port: 6004
+selector:
+  name: *name
+labels:
+  name: *name

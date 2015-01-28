@@ -1,0 +1,8 @@
+apiversion: v1beta1
+kind: Service
+id: &name swift-container
+port: 6001
+selector:
+  name: swift-container-server
+labels:
+  name: *name
