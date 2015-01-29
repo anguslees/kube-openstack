@@ -9,7 +9,9 @@ PATH=$PATH:/usr/local/bin
 : ${HOSTNAME:=$(hostname)}
 export MY_IP HOSTNAME
 
-perl -ple 's/\$ENV\[(\w+)\]/$ENV{$1}/eg' </etc/tempest/tempest.conf.in >/etc/tempest/tempest.conf
+for f in /etc/tempest/tempest.conf; do
+    perl -ple 's/\$ENV\[(\w+)\]/$ENV{$1}/eg' <$f.in >$f
+done
 
 #exec $realbin "$@"
 exec su --preserve-environment -s $realbin user -- "$@"

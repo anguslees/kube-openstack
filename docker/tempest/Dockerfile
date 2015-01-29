@@ -31,6 +31,7 @@ ADD tempest.conf /etc/tempest/tempest.conf.in
 
 ADD _wrap.sh /usr/local/bin/tempest.sh
 ADD tempest_user.sh /usr/local/bin/tempest_user.sh
+ADD openrc /home/user/openrc
 
 WORKDIR /
 ENTRYPOINT ["/usr/local/bin/tempest.sh"]
