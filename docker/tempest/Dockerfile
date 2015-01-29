@@ -25,7 +25,7 @@ USER user
 RUN python setup.py build
 USER root
 RUN python setup.py install && mkdir -p /etc/tempest && cp -r etc/* /etc/tempest/ && \
- /usr/local/bin/tempest --help
+ /usr/local/bin/run-tempest-stress --help
 
 ADD tempest.conf /etc/tempest/tempest.conf.in
 

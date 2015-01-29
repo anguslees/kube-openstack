@@ -2,4 +2,4 @@
 
 . /home/user/openrc
 
-exec /usr/local/bin/run_tempest.sh "$@"
+exec /usr/local/bin/run-tempest-stress "$@"
