@@ -24,7 +24,8 @@ RUN pip install -r requirements.txt
 USER user
 RUN python setup.py build
 USER root
-RUN python setup.py install && cp -r etc /etc/swift
+RUN python setup.py install && cp -r etc /etc/swift && \
+ /usr/local/bin/swift-proxy-server --help
 
 ADD swift.conf /etc/swift/swift.conf.in
 ADD object-server.conf /etc/swift/object-server.conf.in

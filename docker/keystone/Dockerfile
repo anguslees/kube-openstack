@@ -24,7 +24,8 @@ RUN pip install -r requirements.txt
 USER user
 RUN python setup.py build
 USER root
-RUN python setup.py install && cp -r etc /etc/keystone
+RUN python setup.py install && cp -r etc /etc/keystone && \
+ /usr/local/bin/keystone-all --help
 
 ADD keystone.conf /etc/keystone/keystone.conf.in
 ADD catalog.templates /etc/keystone/catalog.templates.in

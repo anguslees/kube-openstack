@@ -24,7 +24,8 @@ RUN pip install -r requirements.txt
 USER user
 RUN python setup.py build
 USER root
-RUN python setup.py install && mkdir -p /etc/tempest && cp -r etc/* /etc/tempest/
+RUN python setup.py install && mkdir -p /etc/tempest && cp -r etc/* /etc/tempest/ && \
+ /usr/local/bin/tempest --help
 
 ADD tempest.conf /etc/tempest/tempest.conf.in
 

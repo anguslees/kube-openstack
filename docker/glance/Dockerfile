@@ -24,7 +24,8 @@ RUN pip install -r requirements.txt
 USER user
 RUN python setup.py build
 USER root
-RUN python setup.py install && cp -r etc /etc/glance
+RUN python setup.py install && cp -r etc /etc/glance && \
+ /usr/local/bin/glance-api --help
 
 # >=0.9.2 required for Ic6d53ed1fef8aee9471f3540f06b39cd5ee4ef82 fix in turn required for mysqlconnector
 RUN pip install sqlalchemy-migrate\>=0.9.2

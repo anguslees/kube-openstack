@@ -31,7 +31,8 @@ RUN python setup.py install && \
  mkdir -p /etc/neutron && \
  cp -r etc/* /etc/neutron/ && \
  mv /etc/neutron/neutron/* /etc/neutron/ && \
- rmdir /etc/neutron/neutron
+ rmdir /etc/neutron/neutron && \
+ /usr/local/bin/neutron-server --help
 
 # >=0.9.2 required for Ic6d53ed1fef8aee9471f3540f06b39cd5ee4ef82 fix in turn required for mysqlconnector
 RUN pip install sqlalchemy-migrate\>=0.9.2

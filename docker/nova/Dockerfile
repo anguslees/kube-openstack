@@ -26,7 +26,8 @@ RUN pip install -r requirements.txt
 USER user
 RUN python setup.py build
 USER root
-RUN python setup.py install && cp -r etc/nova /etc/nova
+RUN python setup.py install && cp -r etc/nova /etc/nova && \
+ /usr/local/bin/nova-api --help
 
 ADD nova.conf /etc/nova/nova.conf.in
 
