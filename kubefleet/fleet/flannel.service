@@ -3,6 +3,7 @@ Requires=etcd.service
 After=etcd.service
 
 [Service]
+ExecStartPre=/usr/bin/install -o root -g root -m 755 -d /opt/bin
 ExecStartPre=/bin/sh -c 'cd /opt/bin && wget --backups=2 --tries=3 https://github.com/anguslees/flannel/releases/download/routed-test/flanneld'
 ExecStartPre=-/usr/bin/chmod +x /opt/bin/flanneld
 ExecStartPre=-/usr/bin/etcdctl mk /coreos.com/network/config \
