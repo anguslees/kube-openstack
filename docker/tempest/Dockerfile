@@ -1,37 +1,47 @@
-FROM ubuntu:vivid
+FROM ubuntu:utopic
 MAINTAINER Angus Lees <gus@inodes.org>
 
-RUN adduser --disabled-login --gecos 'Generic unprivileged user' user
+ENV \
+ PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin \
+ PREFIX=/home/install \
+ ETC_IN=/home/install/etc \
+ ETC=/home/user/etc
 
-RUN apt-get -qq update
-RUN apt-get -qqy upgrade
-
-RUN apt-get -qqy --no-install-recommends install python-dev python-pip git python-mysql.connector
-
-# Fetch as much as we can from apt
-RUN apt-get -qqy --no-install-recommends install python-pbr python-anyjson python-httplib2 python-jsonschema python-testtools python-lxml python-boto python-paramiko python-netaddr python-ceilometerclient python-glanceclient python-keystoneclient python-novaclient python-neutronclient python-cinderclient python-heatclient python-ironicclient python-saharaclient python-swiftclient python-testresources python-testrepository python-oslo.config python-six python-iso8601 python-fixtures python-testscenarios
-
-USER user
+# Run pip install as one (non-root) user, and run resulting binaries
+# as another.
 RUN \
- mkdir -p /tmp/git-fetch && \
- cd /tmp/git-fetch && \
- git init && \
- git fetch --depth 1 https://github.com/openstack/tempest.git master && \
- git checkout FETCH_HEAD
-WORKDIR /tmp/git-fetch
-USER root
-RUN pip install -r requirements.txt
+ apt-get -q update && apt-get -qy upgrade && \
+ adduser --disabled-login --gecos 'Unprivileged runtime user' user && \
+ adduser --disabled-login --gecos 'Unprivileged install user' install && \
+ apt-get -qy --no-install-recommends install \
+ sudo virtualenv python-dev python-pip git build-essential
+
+# System depdendencies needed to build python modules, followed by runtime deps.
+RUN apt-get -qy --no-install-recommends install \
+ libxslt-dev libxml2-dev zlib1g-dev libyaml-dev libffi-dev libssl-dev
+
+# _wrap.sh sets up environment and copies templated configs from $ETC_IN -> $ETC
+COPY _wrap.sh /usr/local/bin/
+ENTRYPOINT ["/usr/local/bin/_wrap.sh"]
+CMD ["/bin/bash"]
+
+USER install
+RUN \
+ set -x && \
+ cd $PREFIX && \
+ git clone --depth 1 --single-branch --branch master https://github.com/openstack/tempest.git git-fetch && \
+ cd git-fetch && \
+ virtualenv --system-site-packages $PREFIX/venv && \
+ $PREFIX/venv/bin/pip install --compile . && \
+ mkdir -p $ETC_IN/tempest && \
+ cp -r etc/* $ETC_IN/tempest/ && \
+ . $PREFIX/venv/bin/activate && run-tempest-stress --help >/dev/null
+
+COPY tempest.conf.in /home/install/etc/tempest/
+
+COPY tempest_user.sh /usr/local/bin/tempest_user.sh
+COPY openrc /home/user/openrc
+
 USER user
-RUN python setup.py build
-USER root
-RUN python setup.py install && mkdir -p /etc/tempest && cp -r etc/* /etc/tempest/ && \
- /usr/local/bin/run-tempest-stress --help
-
-ADD tempest.conf /etc/tempest/tempest.conf.in
-
-ADD _wrap.sh /usr/local/bin/tempest.sh
-ADD tempest_user.sh /usr/local/bin/tempest_user.sh
-ADD openrc /home/user/openrc
-
 WORKDIR /
-ENTRYPOINT ["/usr/local/bin/tempest.sh"]
+ENTRYPOINT ["/usr/local/bin/tempest_user.sh"]
