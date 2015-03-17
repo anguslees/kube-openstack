@@ -19,6 +19,6 @@ desiredState:
             value: %rabbitmq_password%
           - key: ADMIN_PASSWORD
             value: %keystone_admin_password%
-        command: ["/usr/local/bin/keystone-manage.sh", "db_sync"]
+        command: ["keystone-manage", "db_sync"]
     restartPolicy:
       onFailure: {}

@@ -31,5 +31,5 @@ desiredState:
                 value: %keystone_admin_password%
               - key: ADMIN_TOKEN
                 value: %keystone_admin_token%
-            command: ["/usr/local/bin/keystone-all.sh"]
+            command: ["keystone-all"]
             # livenessProbe?
