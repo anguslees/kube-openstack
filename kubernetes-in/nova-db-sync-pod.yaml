@@ -15,6 +15,6 @@ desiredState:
             value: %nova_db_uri%
           - key: ADMIN_PASSWORD
             value: %nova_admin_password%
-        command: ["/usr/local/bin/nova-manage.sh", "db", "sync"]
+        command: ["nova-manage", "db", "sync"]
     restartPolicy:
       onFailure: {}

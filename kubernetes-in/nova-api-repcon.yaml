@@ -35,5 +35,5 @@ desiredState:
                 value: %neutron_metadata_secret%
               - key: NEUTRON_ADMIN_PASSWORD
                 value: %neutron_admin_password%
-            command: ["/usr/local/bin/nova-api.sh"]
+            command: ["nova-api"]
             # livenessProbe?

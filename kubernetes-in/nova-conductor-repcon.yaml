@@ -28,5 +28,5 @@ desiredState:
                 value: %neutron_metadata_secret%
               - key: NEUTRON_ADMIN_PASSWORD
                 value: %neutron_admin_password%
-            command: ["/usr/local/bin/nova-conductor.sh"]
+            command: ["nova-conductor"]
             # fixme: livenessProbe?
