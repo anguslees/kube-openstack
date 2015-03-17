@@ -1,17 +1,28 @@
 #!/bin/sh
 
-set -e -x
+set -e
 
-realbin=${0%.sh}
-PATH=$PATH:/usr/local/bin
+. /home/install/venv/bin/activate
 
 : ${MY_IP:=$(hostname -i)}
 : ${HOSTNAME:=$(hostname)}
 export MY_IP HOSTNAME
 
-for f in /etc/glance/*.conf.in; do
-    perl -ple 's/\$ENV\[(\w+)\]/$ENV{$1}/eg' <$f >${f%.in}
-done
+# TODO(gus): add support for env vars in openstack config files,
+# instead of this code.
+find $ETC_IN -type f -print |
+    while read orig; do
+	out=$ETC/${orig#$ETC_IN/}
+	mkdir -p ${out%/*}
+	case "$orig" in
+	    *.in)
+		out=${out%.in}
+		perl -ple 's/\$ENV\[(\w+)\]/$ENV{$1}/eg' <$orig >$out
+		;;
+	    *)
+		ln -sf $orig $out
+		;;
+	esac
+    done
 
-#exec su --preserve-environment -s $realbin user -- "$@"
-exec $realbin "$@"
+exec "$@"

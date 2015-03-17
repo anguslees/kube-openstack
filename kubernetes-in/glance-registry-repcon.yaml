@@ -27,5 +27,5 @@ desiredState:
                 value: %rabbitmq_password%
               - key: ADMIN_PASSWORD
                 value: %glance_admin_password%
-            command: ["/usr/local/bin/glance-registry.sh"]
+            command: ["glance-registry"]
             # fixme: livenessProbe?

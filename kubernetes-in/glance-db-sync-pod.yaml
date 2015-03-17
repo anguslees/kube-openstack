@@ -15,6 +15,6 @@ desiredState:
             value: %glance_db_uri%
           - key: RABBITMQ_PASSWORD
             value: %rabbitmq_password%
-        command: ["/usr/local/bin/glance-manage.sh", "db_sync"]
+        command: ["glance-manage", "db_sync"]
     restartPolicy:
       onFailure: {}
