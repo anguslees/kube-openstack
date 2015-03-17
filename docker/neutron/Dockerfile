@@ -1,57 +1,59 @@
-FROM ubuntu:vivid
+FROM ubuntu:utopic
 MAINTAINER Angus Lees <gus@inodes.org>
 
-RUN adduser --disabled-login --gecos 'Generic unprivileged user' user
+ENV \
+ PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin \
+ PREFIX=/home/install \
+ ETC_IN=/home/install/etc \
+ ETC=/home/user/etc
 
-RUN apt-get -qq update
-RUN apt-get -qqy upgrade
-
-RUN apt-get -qqy --no-install-recommends install python-dev python-pip git python-mysql.connector
-
-# Fetch as much as we can from apt
-RUN apt-get -qqy --no-install-recommends install python-pbr python-paste python-pastedeploy python-routes python-anyjson python-argparse python-babel python-eventlet python-greenlet python-httplib2 python-requests python-iso8601 python-jsonrpclib python-jinja2 python-keystonemiddleware python-netaddr python-neutronclient python-sqlalchemy python-webob python-keystoneclient python-alembic python-six python-stevedore python-oslo.config python-oslo.db python-oslo.messaging python-oslo.rootwrap python-oslo.serialization python-novaclient python-oslo.concurrency
-
-RUN apt-get -qqy --no-install-recommends install iproute dnsmasq-utils dnsmasq-base iputils-arping ipset
-
-USER user
+# Run pip install as one (non-root) user, and run resulting binaries
+# as another.
 RUN \
- mkdir -p /tmp/git-fetch && \
- cd /tmp/git-fetch && \
- git init && \
- git fetch --depth 1 https://github.com/openstack/neutron.git master && \
- git checkout FETCH_HEAD
-WORKDIR /tmp/git-fetch
-USER root
-RUN pip install -r requirements.txt
-USER user
-RUN python setup.py build
-USER root
-# neutron git repo has files in both etc/ and etc/neutron
-RUN python setup.py install && \
+ apt-get -q update && apt-get -qy upgrade && \
+ adduser --disabled-login --gecos 'Unprivileged runtime user' user && \
+ adduser --disabled-login --gecos 'Unprivileged install user' install && \
+ apt-get -qy --no-install-recommends install \
+ sudo virtualenv python-dev python-pip git build-essential
+
+# System depdendencies needed to build python modules, followed by runtime deps.
+#
+# Note!
+# rootwrap.conf controls sudo/rootwrap access and in a secure setup needs to
+# be installed from a trusted source to a location writeable only by
+# root.  In the interests of easy testing of git HEAD, that is not
+# what we're doing here.
+#
+RUN apt-get -qy --no-install-recommends install \
+ libxslt-dev libxml2-dev zlib1g-dev libyaml-dev libffi-dev libssl-dev \
+ iproute dnsmasq-utils dnsmasq-base iputils-arping ipset && \
  mkdir -p /etc/neutron && \
- cp -r etc/* /etc/neutron/ && \
- mv /etc/neutron/neutron/* /etc/neutron/ && \
- rmdir /etc/neutron/neutron && \
- /usr/local/bin/neutron-server --help
+ ln -s $ETC/neutron/rootwrap.conf /etc/neutron/rootwrap.conf && \
+ ln -s $ETC/neutron/rootwrap.d /etc/neutron/rootwrap.d && \
+ echo "user ALL = (root) NOPASSWD: $PREFIX/venv/bin/neutron-rootwrap /etc/neutron/rootwrap.conf *" > /etc/sudoers.d/rootwrap
 
-# >=0.9.2 required for Ic6d53ed1fef8aee9471f3540f06b39cd5ee4ef82 fix in turn required for mysqlconnector
-RUN pip install sqlalchemy-migrate\>=0.9.2
+# _wrap.sh sets up environment and copies templated configs from $ETC_IN -> $ETC
+COPY _wrap.sh /usr/local/bin/
+ENTRYPOINT ["/usr/local/bin/_wrap.sh"]
+CMD ["/bin/bash"]
 
-ADD neutron.conf /etc/neutron/neutron.conf.in
-ADD l3_agent_network.ini /etc/neutron/l3_agent_network.ini.in
-ADD l3_agent_compute.ini /etc/neutron/l3_agent_compute.ini.in
-ADD metadata_agent.ini /etc/neutron/metadata_agent.ini.in
-ADD ml2_conf.ini /etc/neutron/ml2_conf.ini.in
+# Note neutron git repo has files in both etc/ and etc/neutron
+USER install
+RUN \
+ set -x && \
+ cd $PREFIX && \
+ git clone --depth 1 --single-branch --branch master https://github.com/openstack/neutron.git git-fetch && \
+ cd git-fetch && \
+ virtualenv --system-site-packages $PREFIX/venv && \
+ $PREFIX/venv/bin/pip install --compile . && \
+ mkdir -p $ETC_IN/neutron && \
+ cp -r etc/* $ETC_IN/neutron/ && \
+ mv $ETC_IN/neutron/neutron/* $ETC_IN/neutron/ && \
+ rmdir $ETC_IN/neutron/neutron && \
+ . $PREFIX/venv/bin/activate && neutron-server --help >/dev/null
 
-ADD _wrap.sh /usr/local/bin/neutron-server.sh
-ADD _wrap.sh /usr/local/bin/neutron-dhcp-agent.sh
-ADD _wrap.sh /usr/local/bin/neutron-l3-agent.sh
-ADD _wrap.sh /usr/local/bin/neutron-lbaas-agent.sh
-ADD _wrap.sh /usr/local/bin/neutron-metadata-agent.sh
-ADD _wrap.sh /usr/local/bin/neutron-openvswitch-agent.sh
-ADD _wrap.sh /usr/local/bin/neutron-vpn-agent.sh
-ADD _wrap.sh /usr/local/bin/neutron-metering-agent.sh
-ADD _wrap.sh /usr/local/bin/neutron-db-manage.sh
+COPY neutron.conf.in l3_agent_network.ini.in l3_agent_compute.ini.in metadata_agent.ini.in ml2_conf.ini.in /etc/neutron/
 
+USER user
 WORKDIR /
 EXPOSE 9696 9697 4789
