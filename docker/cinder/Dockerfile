@@ -25,7 +25,7 @@ RUN \
 # what we're doing here.
 #
 RUN apt-get -qy --no-install-recommends install \
- libxslt-dev libxml2-dev libffi-dev libssl-dev \
+ libxslt-dev libxml2-dev libffi-dev libssl-dev && \
  mkdir -p /etc/cinder && \
  ln -s $ETC/cinder/rootwrap.conf /etc/cinder/rootwrap.conf && \
  ln -s $ETC/cinder/rootwrap.d /etc/cinder/rootwrap.d && \
