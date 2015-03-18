@@ -23,5 +23,5 @@ desiredState:
                 value: %swift_hash_path_prefix%
               - key: HASH_PATH_SUFFIX
                 value: %swift_hash_path_suffix%
-            command: ["/usr/local/bin/swift-object-auditor.sh", "/etc/swift/object-server.conf"]
+            command: ["swift-object-auditor", "/home/user/etc/swift/object-server.conf"]
             # livenessProbe?

@@ -38,7 +38,7 @@ desiredState:
               - key: SWIFT_ENABLE_SNET
                 value: "true"
 
-            command: ["glance-api"]
+            command: ["glance-api", "--config-file=/home/user/etc/glance/glance-api.conf"]
             volumeMounts:
               - name: store
                 mountPath: /store
@@ -59,7 +59,7 @@ desiredState:
                 value: %glance_admin_password%
               - key: METADATA_ENCRYPTION_KEY
                 value: %glance_metadata_encryption_key%
-            command: ["glance-scrubber"]
+            command: ["glance-scrubber", "--config-file=/home/user/etc/glance/glance-scrubber.conf"]
             volumeMounts:
               - name: store
                 mountPath: /store

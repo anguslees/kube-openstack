@@ -25,5 +25,5 @@ desiredState:
                 value: %rabbitmq_password%
               - key: ADMIN_PASSWORD
                 value: %nova_admin_password%
-            command: ["nova-consoleauth"]
+            command: ["nova-consoleauth", "--config-file=/home/user/etc/nova/nova.conf"]
             # livenessProbe?

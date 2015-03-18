@@ -15,6 +15,6 @@ desiredState:
             value: %neutron_db_uri%
           - key: ADMIN_PASSWORD
             value: %neutron_admin_password%
-        command: ["neutron-db-manage", "--config-file=$ETC/neutron/neutron.conf", "--config-file=$ETC/neutron/ml2_conf.ini", "upgrade", "head"]
+        command: ["neutron-db-manage", "--config-file=/home/user/etc/neutron/neutron.conf", "--config-file=/home/user/etc/neutron/ml2_conf.ini", "upgrade", "head"]
     restartPolicy:
       onFailure: {}

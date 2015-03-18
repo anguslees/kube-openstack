@@ -25,7 +25,7 @@ desiredState:
                 value: %swift_hash_path_prefix%
               - key: HASH_PATH_SUFFIX
                 value: %swift_hash_path_suffix%
-            command: ["/usr/local/bin/swift-account-server.sh", "/etc/swift/account-server.conf"]
+            command: ["swift-account-server", "/home/user/etc/swift/account-server.conf"]
             livenessProbe:
               initialDelaySeconds: 30
               type: http

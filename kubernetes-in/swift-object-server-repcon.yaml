@@ -28,7 +28,7 @@ desiredState:
             volumeMounts:
               - name: data1
                 mountPath: /srv/node/data1
-            command: ["/usr/local/bin/swift-object-server.sh", "/etc/swift/object-server.conf"]
+            command: ["swift-object-server", "/home/user/etc/swift/object-server.conf"]
             livenessProbe:
               initialDelaySeconds: 30
               type: http

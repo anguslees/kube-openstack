@@ -30,7 +30,7 @@ desiredState:
                 value: %swift_hash_path_prefix%
               - key: HASH_PATH_SUFFIX
                 value: %swift_hash_path_suffix%
-            command: ["/usr/local/bin/swift-proxy-server.sh", "/etc/swift/proxy-server.conf"]
+            command: ["swift-proxy-server", "/home/user/etc/swift/proxy-server.conf"]
             livenessProbe:
               initialDelaySeconds: 30
               type: http

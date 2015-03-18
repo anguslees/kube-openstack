@@ -31,5 +31,5 @@ desiredState:
                 value: %neutron_metadata_secret%
               - key: NOVA_ADMIN_PASSWORD
                 value: %nova_admin_password%
-            command: ["neutron-server"]
+            command: ["neutron-server", "--config-file=/home/user/etc/neutron/neutron.conf"]
             # livenessProbe?
