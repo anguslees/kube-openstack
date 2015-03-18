@@ -8,7 +8,7 @@ Requires=kube-download.service
 [Service]
 EnvironmentFile=-/etc/environment
 ExecStart=/opt/kubernetes/server/bin/kube-proxy \
- --etcd_servers=http://127.0.0.1:4001 \
+ --master=192.168.0.1:8080
  --logtostderr=true
 Restart=always
 RestartSec=10

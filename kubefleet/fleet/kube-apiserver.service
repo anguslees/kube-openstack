@@ -1,20 +1,23 @@
 [Unit]
 Description=Kubernetes API Server
 Documentation=https://github.com/GoogleCloudPlatform/kubernetes
-Requires=network-online.target
-After=network-online.target
-After=kube-download.service
+Requires=network-online.target etcd.service
+After=network-online.target etcd.service
 Requires=kube-download.service
+After=kube-download.service
 
 [Service]
+Environment=SVC_ADDRESS=192.168.0.1
+ExecStartPre=/usr/bin/ip addr add ${SVC_ADDRESS}/32 dev eth2
 ExecStart=/opt/kubernetes/server/bin/kube-apiserver \
- --address=127.0.0.1 \
+ --address=${SVC_ADDRESS} \
  --port=8080 \
  --etcd_servers=http://127.0.0.1:4001 \
  --cloud_provider=openstack \
  --cloud_config=/etc/kube-openstack.conf \
  --portal_net=172.21.0.0/24 \
  --logtostderr=true
+ExecStopPost=/usr/bin/ip addr del ${SVC_ADDRESS}/32 dev eth2
 Restart=always
 RestartSec=10
 

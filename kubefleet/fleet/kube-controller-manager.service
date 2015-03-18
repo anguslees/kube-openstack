@@ -1,15 +1,12 @@
 [Unit]
 Description=Kubernetes Controller Manager
 Documentation=https://github.com/GoogleCloudPlatform/kubernetes
-Requires=network-online.target
-After=network-online.target
-After=kube-apiserver.service
-After=kube-download.service
-Requires=kube-download.service
+Requires=network-online.target kube-apiserver.service kube-download.service
+After=network-online.target kube-apiserver.service kube-download.service
 
 [Service]
 ExecStart=/opt/kubernetes/server/bin/kube-controller-manager \
- --master=127.0.0.1:8080 \
+ --master=192.168.0.1:8080 \
  --cloud_provider=openstack \
  --cloud_config=/etc/kube-openstack.conf \
  --minion_regexp=^testkube-minion-[0-9] \

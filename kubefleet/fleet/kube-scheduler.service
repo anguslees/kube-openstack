@@ -1,13 +1,12 @@
 [Unit]
 Description=Kubernetes Scheduler Server
 Documentation=https://github.com/GoogleCloudPlatform/kubernetes
-After=kube-apiserver.service
-After=kube-download.service
-Requires=kube-download.service
+After=kube-apiserver.service kube-download.service
+Requires=kube-apiserver.service kube-download.service
 
 [Service]
 ExecStart=/opt/kubernetes/server/bin/kube-scheduler \
- --master=127.0.0.1:8080 \
+ --master=192.168.0.1:8080 \
  --logtostderr=true
 Restart=always
 RestartSec=10
