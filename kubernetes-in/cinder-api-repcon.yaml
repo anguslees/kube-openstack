@@ -37,5 +37,5 @@ desiredState:
                 value: %swift_password%
               - key: SWIFT_STORE_TENANT
                 value: %swift_tenant_name%
-            command: ["/usr/local/bin/cinder-api.sh"]
+            command: ["cinder-api", "--config-file=/home/user/etc/cinder/cinder.conf"]
             # livenessProbe?
