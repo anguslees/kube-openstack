@@ -32,7 +32,7 @@ RUN \
  git clone --depth 1 --single-branch --branch master https://github.com/openstack/glance.git git-fetch && \
  cd git-fetch && \
  virtualenv --system-site-packages $PREFIX/venv && \
- $PREFIX/venv/bin/pip install --compile . && \
+ $PREFIX/venv/bin/pip install --compile . PyMySQL && \
  mkdir -p $ETC_IN && \
  cp -r etc $ETC_IN/glance && \
  . $PREFIX/venv/bin/activate && glance-api --help >/dev/null

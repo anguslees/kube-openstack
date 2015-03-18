@@ -44,7 +44,7 @@ RUN \
  git clone --depth 1 --single-branch --branch master https://github.com/openstack/nova.git git-fetch && \
  cd git-fetch && \
  virtualenv --system-site-packages $PREFIX/venv && \
- $PREFIX/venv/bin/pip install --compile . && \
+ $PREFIX/venv/bin/pip install --compile . PyMySQL && \
  mkdir -p $ETC_IN && \
  cp -r etc/nova $ETC_IN/nova && \
  . $PREFIX/venv/bin/activate && nova-api --help >/dev/null

@@ -45,7 +45,7 @@ RUN \
  git clone --depth 1 --single-branch --branch master https://github.com/openstack/neutron.git git-fetch && \
  cd git-fetch && \
  virtualenv --system-site-packages $PREFIX/venv && \
- $PREFIX/venv/bin/pip install --compile . && \
+ $PREFIX/venv/bin/pip install --compile . PyMySQL && \
  mkdir -p $ETC_IN/neutron && \
  cp -r etc/* $ETC_IN/neutron/ && \
  mv $ETC_IN/neutron/neutron/* $ETC_IN/neutron/ && \
