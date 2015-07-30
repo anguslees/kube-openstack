@@ -18,7 +18,9 @@ RUN \
 
 # System depdendencies needed to build python modules, followed by runtime deps.
 RUN apt-get -qy --no-install-recommends install \
- libyaml-dev libffi-dev libssl-dev
+ libyaml-dev libffi-dev libssl-dev && \
+ mkdir -p /var/lib/glance /var/lock/glance && \
+ chown user:user /var/lib/glance /var/lock/glance
 
 # _wrap.sh sets up environment and copies templated configs from $ETC_IN -> $ETC
 COPY _wrap.sh /usr/local/bin/

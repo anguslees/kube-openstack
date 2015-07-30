@@ -27,7 +27,8 @@ RUN \
 RUN apt-get -qy --no-install-recommends install \
  libxslt-dev libxml2-dev zlib1g-dev libyaml-dev libffi-dev libssl-dev \
  iproute dnsmasq-utils dnsmasq-base iputils-arping ipset && \
- mkdir -p /etc/neutron && \
+ mkdir -p /etc/neutron /var/lib/neutron /var/lock/neutron && \
+ chown user:user /var/lib/neutron /var/lock/neutron && \
  ln -s $ETC/neutron/rootwrap.conf /etc/neutron/rootwrap.conf && \
  ln -s $ETC/neutron/rootwrap.d /etc/neutron/rootwrap.d && \
  echo "user ALL = (root) NOPASSWD: $PREFIX/venv/bin/neutron-rootwrap /etc/neutron/rootwrap.conf *" > /etc/sudoers.d/rootwrap

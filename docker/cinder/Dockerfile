@@ -26,7 +26,8 @@ RUN \
 #
 RUN apt-get -qy --no-install-recommends install \
  libxslt-dev libxml2-dev libffi-dev libssl-dev && \
- mkdir -p /etc/cinder && \
+ mkdir -p /etc/cinder /var/lib/cinder /var/lock/cinder && \
+ chown user:user /var/lib/cinder /var/lock/cinder && \
  ln -s $ETC/cinder/rootwrap.conf /etc/cinder/rootwrap.conf && \
  ln -s $ETC/cinder/rootwrap.d /etc/cinder/rootwrap.d && \
  echo "user ALL = (root) NOPASSWD: $PREFIX/venv/bin/cinder-rootwrap /etc/cinder/rootwrap.conf *" > /etc/sudoers.d/rootwrap

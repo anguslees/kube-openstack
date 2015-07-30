@@ -27,7 +27,8 @@ RUN \
 RUN apt-get -qy --no-install-recommends install \
  libxslt-dev libxml2-dev zlib1g-dev libyaml-dev libffi-dev libssl-dev \
  iproute2 iptables novnc && \
- mkdir -p /etc/nova && \
+ mkdir -p /etc/nova /var/lib/nova /var/lock/nova && \
+ chown user:user /var/lib/nova /var/lock/nova && \
  ln -s $ETC/nova/rootwrap.conf /etc/nova/rootwrap.conf && \
  ln -s $ETC/nova/rootwrap.d /etc/nova/rootwrap.d && \
  echo "user ALL = (root) NOPASSWD: $PREFIX/venv/bin/nova-rootwrap /etc/nova/rootwrap.conf *" > /etc/sudoers.d/rootwrap
