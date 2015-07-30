@@ -43,7 +43,7 @@ enabled_apis = ec2, osapi_compute
 ec2_port = 8773
 metadata_port = 8775
 
-novncproxy_base_url = http://ENV[NOVA_NOVNCPROXY_PORT_6080_TCP_ADDR]:$ENV[NOVA_NOVNCPROXY_PORT_6080_TCP_PORT]/vnc_auto.html
+novncproxy_base_url = http://$ENV[NOVA_NOVNCPROXY_PORT_6080_TCP_ADDR]:$ENV[NOVA_NOVNCPROXY_PORT_6080_TCP_PORT]/vnc_auto.html
 vnc_enabled = True
 vncserver_listen = 0.0.0.0
 vncserver_proxyclient_address = $ENV[MY_IP]
