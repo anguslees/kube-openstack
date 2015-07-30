@@ -26,7 +26,7 @@ RUN \
 #
 RUN apt-get -qy --no-install-recommends install \
  libxslt-dev libxml2-dev zlib1g-dev libyaml-dev libffi-dev libssl-dev \
- iproute2 iptables && \
+ iproute2 iptables novnc && \
  mkdir -p /etc/nova && \
  ln -s $ETC/nova/rootwrap.conf /etc/nova/rootwrap.conf && \
  ln -s $ETC/nova/rootwrap.d /etc/nova/rootwrap.d && \
