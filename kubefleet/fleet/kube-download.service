@@ -8,7 +8,7 @@ After=network-online.target
 Type=oneshot
 RemainAfterExit=yes
 ExecStartPre=/usr/bin/install -o root -g root -m 755 -d /opt
-ExecStart=/bin/sh -c 'cd /opt && wget --backups=2 --tries=3 https://github.com/anguslees/kubernetes/releases/download/v0.12.0-dev/kubernetes-server-linux-amd64.tar.gz && tar -zxv -f kubernetes-server-linux-amd64.tar.gz'
+ExecStart=/bin/sh -c 'cd /opt && wget --backups=2 --tries=3 https://github.com/anguslees/kubernetes/releases/download/v0.13.0-dev/kubernetes-server-linux-amd64.tar.gz && tar -zxv -f kubernetes-server-linux-amd64.tar.gz'
 
 [X-Fleet]
 Global=true
