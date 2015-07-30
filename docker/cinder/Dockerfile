@@ -43,6 +43,7 @@ RUN \
  git clone --depth 1 --single-branch --branch master https://github.com/openstack/cinder.git git-fetch && \
  cd git-fetch && \
  virtualenv --system-site-packages $PREFIX/venv && \
+ $PREFIX/venv/bin/pip install --upgrade pip && \
  $PREFIX/venv/bin/pip install --compile . PyMySQL && \
  mkdir -p $ETC_IN/cinder && \
  cp -r etc/cinder/* $ETC_IN/cinder/ && \
