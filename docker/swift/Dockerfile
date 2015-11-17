@@ -1,56 +1,60 @@
 FROM ubuntu:vivid
 MAINTAINER Angus Lees <gus@inodes.org>
 
-RUN adduser --disabled-login --gecos 'Generic unprivileged user' user
+ENV \
+ PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin \
+ PREFIX=/home/install \
+ ETC_IN=/home/install/etc \
+ ETC=/home/user/etc \
+ BRANCH=master
 
-RUN apt-get -qq update
-RUN apt-get -qqy upgrade
-
-RUN apt-get -qqy --no-install-recommends install python-dev python-pip git
-
-# Fetch as much as we can from apt
-RUN apt-get -qqy --no-install-recommends install python-dnspython python-eventlet python-greenlet python-netifaces python-pastedeploy python-simplejson python-xattr rsync python-keystonemiddleware
-
-USER user
+# Run pip install as one (non-root) user, and run resulting binaries
+# as another.
 RUN \
- mkdir -p /tmp/git-fetch && \
- cd /tmp/git-fetch && \
- git init && \
- git fetch --depth 1 https://github.com/openstack/swift.git master && \
- git checkout FETCH_HEAD
-WORKDIR /tmp/git-fetch
-USER root
-RUN pip install -r requirements.txt
+ apt-get -q update && apt-get -qy upgrade && \
+ adduser --disabled-login --gecos 'Unprivileged runtime user' user && \
+ adduser --disabled-login --gecos 'Unprivileged install user' install && \
+ apt-get -qy --no-install-recommends install \
+ sudo virtualenv python-dev python-pip git build-essential
+
+# System depdendencies needed to build python modules, followed by runtime deps.
+#
+# Note!
+# rootwrap.conf controls sudo/rootwrap access and in a secure setup needs to
+# be installed from a trusted source to a location writeable only by
+# root.  In the interests of easy testing of git HEAD, that is not
+# what we're doing here.
+#
+RUN \
+ set -x && \
+ apt-get -qy --no-install-recommends install \
+ libxslt-dev libxml2-dev zlib1g-dev libyaml-dev libffi-dev libssl-dev \
+ rsync && \
+ mkdir -p /etc/swift /var/lib/swift /var/lock/swift && \
+ chown user:user /var/lib/swift /var/lock/swift
+
+# _wrap.sh sets up environment and copies templated configs from $ETC_IN -> $ETC
+COPY _wrap.sh /usr/local/bin/
+ENTRYPOINT ["/usr/local/bin/_wrap.sh"]
+CMD ["/bin/bash"]
+
+USER install
+RUN \
+ set -x && \
+ cd $PREFIX && \
+ git clone --depth 1 --single-branch --branch $BRANCH https://github.com/openstack/swift.git git-fetch && \
+ cd git-fetch && \
+ virtualenv --system-site-packages $PREFIX/venv && \
+ $PREFIX/venv/bin/pip install --upgrade --compile 'pip>=6' && \
+ $PREFIX/venv/bin/pip install --compile 'pbr>=1.3' && \
+ $PREFIX/venv/bin/pip install --compile . PyMySQL && \
+ mkdir -p $ETC_IN && \
+ cp -r etc $ETC_IN/swift && \
+ . $PREFIX/venv/bin/activate && swift-proxy-server --help
+
+COPY swift.conf.in object-server.conf.in container-server.conf.in account-server.conf.in proxy-server.conf.in /etc/swift/
+
 USER user
-RUN python setup.py build
-USER root
-RUN python setup.py install && cp -r etc /etc/swift && \
- /usr/local/bin/swift-proxy-server --help
-
-ADD swift.conf /etc/swift/swift.conf.in
-ADD object-server.conf /etc/swift/object-server.conf.in
-ADD container-server.conf /etc/swift/container-server.conf.in
-ADD account-server.conf /etc/swift/account-server.conf.in
-ADD proxy-server.conf /etc/swift/proxy-server.conf.in
-
-ADD _wrap.sh /usr/local/bin/swift-object-auditor.sh
-ADD _wrap.sh /usr/local/bin/swift-object-expirer.sh
-ADD _wrap.sh /usr/local/bin/swift-object-replicator.sh
-ADD _wrap.sh /usr/local/bin/swift-object-server.sh
-ADD _wrap.sh /usr/local/bin/swift-object-updater.sh
-ADD _wrap.sh /usr/local/bin/swift-proxy-server.sh
-ADD _wrap.sh /usr/local/bin/swift-account-auditor.sh
-ADD _wrap.sh /usr/local/bin/swift-account-reaper.sh
-ADD _wrap.sh /usr/local/bin/swift-account-replicator.sh
-ADD _wrap.sh /usr/local/bin/swift-account-server.sh
-ADD _wrap.sh /usr/local/bin/swift-container-auditor.sh
-ADD _wrap.sh /usr/local/bin/swift-container-replicator.sh
-ADD _wrap.sh /usr/local/bin/swift-container-server.sh
-ADD _wrap.sh /usr/local/bin/swift-container-sync.sh
-ADD _wrap.sh /usr/local/bin/swift-container-updater.sh
-ADD _wrap.sh /usr/local/bin/swift-container-reconciler.sh
-ADD _wrap.sh /usr/local/bin/swift-ring-builder.sh
-
 WORKDIR /
 VOLUME ["/srv/node"]
 EXPOSE 80 6000 6001 6002
