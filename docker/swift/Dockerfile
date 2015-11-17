@@ -6,7 +6,7 @@ ENV \
  PREFIX=/home/install \
  ETC_IN=/home/install/etc \
  ETC=/home/user/etc \
- BRANCH=master
+ BRANCH=stable/liberty
 
 # Run pip install as one (non-root) user, and run resulting binaries
 # as another.

@@ -5,7 +5,8 @@ ENV \
  PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin \
  PREFIX=/home/install \
  ETC_IN=/home/install/etc \
- ETC=/home/user/etc
+ ETC=/home/user/etc \
+ BRANCH=stable/liberty
 
 # Run pip install as one (non-root) user, and run resulting binaries
 # as another.
@@ -24,7 +25,9 @@ RUN \
 # root.  In the interests of easy testing of git HEAD, that is not
 # what we're doing here.
 #
-RUN apt-get -qy --no-install-recommends install \
+RUN \
+ set -x && \
+ apt-get -qy --no-install-recommends install \
  libxslt-dev libxml2-dev zlib1g-dev libyaml-dev libffi-dev libssl-dev \
  iproute2 iptables novnc python-libvirt && \
  mkdir -p /etc/nova /var/lib/nova /var/lock/nova && \
@@ -42,10 +45,10 @@ USER install
 RUN \
  set -x && \
  cd $PREFIX && \
- git clone --depth 1 --single-branch --branch master https://github.com/openstack/nova.git git-fetch && \
+ git clone --depth 1 --single-branch --branch $BRANCH https://github.com/openstack/nova.git git-fetch && \
  cd git-fetch && \
  virtualenv --system-site-packages $PREFIX/venv && \
- $PREFIX/venv/bin/pip install --upgrade --compile pip && \
+ $PREFIX/venv/bin/pip install --upgrade --compile 'pip>=6' && \
  $PREFIX/venv/bin/pip install --compile 'pbr>=1.3' && \
  $PREFIX/venv/bin/pip install --compile . PyMySQL && \
  mkdir -p $ETC_IN && \

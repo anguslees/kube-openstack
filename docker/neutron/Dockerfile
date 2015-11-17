@@ -5,7 +5,8 @@ ENV \
  PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin \
  PREFIX=/home/install \
  ETC_IN=/home/install/etc \
- ETC=/home/user/etc
+ ETC=/home/user/etc \
+ BRANCH=stable/liberty
 
 # Run pip install as one (non-root) user, and run resulting binaries
 # as another.
@@ -43,7 +44,7 @@ USER install
 RUN \
  set -x && \
  cd $PREFIX && \
- git clone --depth 1 --single-branch --branch master https://github.com/openstack/neutron.git git-fetch && \
+ git clone --depth 1 --single-branch --branch $BRANCH https://github.com/openstack/neutron.git git-fetch && \
  cd git-fetch && \
  virtualenv --system-site-packages $PREFIX/venv && \
  $PREFIX/venv/bin/pip install --upgrade pip && \
